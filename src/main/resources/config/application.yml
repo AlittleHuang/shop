@@ -1,0 +1,25 @@
+logging:
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS} ${PID: } [%t] %logger{90}:%L){cyan}%n  [%clr(%p)]%m%n'
+  path: /logs/tomcat/wan_neng_lian
+  level:
+    com.shengchuang: info
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    sql-script-encoding: UTF-8
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl.auto: update
+        format_sql: true
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 30MB
+system:
+  image.upload.path: /upload/
+  image.resours.uri: upload/image/

@@ -1,0 +1,50 @@
+.temjiangli {
+    height: 50px;
+    width: 29%;
+    float: left;
+    margin-right: 35px;
+}
+
+.tem_title {
+    width: 65px;
+    display: inline-block;
+    margin-left: 17px;
+}
+
+.temMain {
+    width: 50%;
+    float: right;
+    margin-right: 50px;
+    height: 35px;
+    margin-top: 10px;
+}
+
+.temjiangli2 {
+    height: 50px;
+    width: 46%;
+    float: left;
+    margin-right: 35px;
+}
+
+.tem_title2 {
+    width: 65px;
+    display: inline-block;
+    margin-left: 17px;
+}
+
+.temMain2 {
+    width: 30%;
+    float: right;
+    margin-right: 50px;
+    height: 35px;
+    margin-top: 10px;
+}
+
+#recommend {
+    display: inline-block;
+    width: 77%;
+}
+
+.form-control {
+    width: 93%;
+}

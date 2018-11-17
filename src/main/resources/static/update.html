@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MMD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="fronts/resources/css/mui.css">
+    <link href="fronts/resources/css/index.css?v=1" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="mui-content">
+    <div id="slider" class="mui-slider mui-fullscreen login loginzc">
+        <div class="headnav">
+            <div class="goback">
+                <a href='fronts/index.html'>&lt;</a>
+            </div>
+            <div class="index_title">更新中</div>
+        </div>
+        <div class="hj_main loginzcMain">
+            <div class="setpass">
+                <div id="item1" class="mui-control-content   mui-active" style="margin-top: 200px">
+                    <center><h3 style="color: white">系统正在更新,请稍后重试!</h3></center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="fronts/resources/js/mui.min.js"></script>
+<script src="fronts/resources/js/mui.pullToRefresh.js"></script>
+<script src="fronts/resources/js/mui.pullToRefresh.material.js"></script>
+<script src="fronts/resources/js/jquery-1.12.4.min.js"></script>
+<script src="fronts/resources/js/auto-height.js"></script>
+<script src="fronts/resources/js/server.js?v=1.00"></script>
+<script>
+    logincheck$$ = false
+    //提交表单
+    $("#submitm").bind('click', function (data) {
+        var param = $("#FormId").serialize();
+        console.log(param);
+        //ajax异步提交
+        $s.ajax({
+            type: "POST",
+            url: "/register",
+            data: param,
+            dataType: "JSON",
+            success: function (data) {
+                if ($s.isapp)
+                    data = JSON.parse(data)
+                if (data.success) {
+                    mui.toast("注册成功！", {duration: 1500, type: 'div'});
+                    //刷新页面
+                    setTimeout(function (args) {
+                        location.href = 'login.html'
+                    }, 2000);
+
+                } else {
+                    mui.toast(data.message, ' ', function () {
+                    });
+                }
+
+                console.dir(data);
+                //返回类型 无论如何都会获取到值的
+            }
+        });
+    });
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+
+    //将推荐人名字显示
+    var strUsername = getQueryString("u");
+    if (strUsername != null) {
+        strUsername = decodeURI(strUsername);
+        $("#referUsername").val(strUsername);
+        $("#referUsername").attr("readonly", true)
+
+    }
+
+
+    var countdown = 180;
+
+    function settime() {
+        var val = $('#regetBtn')[0];
+        //debugger
+        if (countdown == 0) {
+            val.removeAttribute("disabled");
+            val.innerHTML = "发送验证码";
+            countdown = 60;
+            return false;
+        } else {
+            val.setAttribute("disabled", true);
+            val.innerHTML = "重新发送(" + countdown + ")";
+            countdown--;
+        }
+        setTimeout(function () {
+            settime();
+        }, 1000)
+    }
+
+    //获取手机验证码
+    $("#regetBtn").click(function () {
+        $.post("/msm/register/send", {phone: $("#phone").val()}, function (resp) {
+            alert(resp.message)
+            if (resp.success)
+                settime();
+        })
+        return false;
+    });
+</script>
+</body>
+</html>

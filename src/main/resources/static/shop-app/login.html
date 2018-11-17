@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+
+</head>
+<body>
+<form onsubmit="false">
+    <input name="username" placeholder="用户名">
+    <input type="password" name="password" placeholder="密码">
+    <input type="button" value="登陆" id="login-btn">
+</form>
+<button id="test">test</button>
+<script src="../common/js/jquery.min.js"></script>
+<script src="../common/js/ajax-config.js"></script>
+<script>
+    $("#login-btn").click(function () {
+        $.post("/login", $("form").serialize(), function (data) {
+            if(data.success){
+                if (data.sessionId != undefined)
+                    shop.setToken(data.sessionId)
+                location.href = "index.html"
+            }
+            alert(data.message)
+        })
+    })
+
+    $("#test").click(function () {
+        $.shop.get("/user/test", {}, function (data) {
+            console.log(data)
+        })
+    })
+
+</script>
+</body>
+</html>
