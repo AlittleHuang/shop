@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Full Layout - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui-1.6.9/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui-1.6.9/themes/icon.css">
+    <!--<link rel="stylesheet" type="text/css" href="../demo.css">-->
+    <script type="text/javascript" src="../jquery-easyui-1.6.9/jquery.min.js"></script>
+    <script type="text/javascript" src="../jquery-easyui-1.6.9/jquery.easyui.min.js"></script>
+</head>
+<body class="easyui-layout">
+
+
+<div data-options="region:'north',border:false" style="height:60px;padding:10px">
+    商品管理系统
+</div>
+
+
+<div data-options="region:'west',split:false,title:'West'" class="easyui-accordion" style="width:250px;">
+    <div title="About">
+        <li><a class="left-menu" href="">商品分类管理</a></li>
+        <li><a class="left-menu" href="">商品分类管理</a></li>
+    </div>
+    <div title="Help">
+
+    </div>
+    <div title="TreeMenu">
+
+    </div>
+</div>
+
+
+<div data-options="region:'center'">
+    <div id="main-title" class="panel-header" style="width: 982px;">
+        <div class="panel-title"></div>
+    </div>
+    <div id="main-content">
+
+    </div>
+</div>
+<script>
+
+    $("a.left-menu").click(function () {
+        $("#main-content").load("sub/categories.html")
+        $("#main-title").text(this.innerHTML)
+        return false;
+    })
+
+</script>
+
+</body>
+</html>
