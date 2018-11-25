@@ -13,6 +13,9 @@ public class ProductController extends AbstractController {
     @PostMapping("/seller/product/add")
     public View addProduct(Product product) {
 
+
+
+
         return new JsonMap();
     }
 

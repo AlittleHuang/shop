@@ -11,7 +11,8 @@ import javax.persistence.*;
  */
 @Data
 @NoArgsConstructor
-@Entity(name = "categories")
+@Entity
+@Table(name = "categories", uniqueConstraints = @UniqueConstraint(columnNames = {"pid", "name"}))
 public class Categories {
 
     /**
@@ -21,27 +22,21 @@ public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /**
-     * 父级分类
-     */
-    @ManyToOne
-    @JoinColumn(name = "pid")
-    private Categories parant;
+//    /**
+//     * 父级分类
+//     */
+//    @ManyToOne
+//    @JoinColumn(name = "pid")
+//    private Categories parant;
+
+    private Integer pid;
 
     /**
      * 名称
      */
     private String name;
 
-    /**
-     * 级别
-     */
-    private Integer level;
-
-    /**
-     * 允许添加商品
-     */
-    @Column(name = "allow_products")
-    private Boolean allowProducts;
-
+    public Categories(String name) {
+        this.name = name;
+    }
 }
