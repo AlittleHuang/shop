@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * 商品分类
@@ -36,7 +37,11 @@ public class Categories {
      */
     private String name;
 
-    public Categories(String name) {
+    @Transient
+    private List<Categories> children;
+
+    public Categories(Integer pid, String name) {
+        this.pid = pid;
         this.name = name;
     }
 }

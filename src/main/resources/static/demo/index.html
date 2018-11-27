@@ -39,14 +39,17 @@
 <script>
 
     $("a.left-menu").click(function () {
+
         let url = $(this).attr("href");
         let title = this.innerHTML;
 
-        if ($('#tt').tabs('exists', title)){
-            $('#tt').tabs('select', title);
+        let $tt = $('#tt');
+
+        var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+        if ($tt.tabs('exists', title)) {
+            let tab = $tt.tabs('select', title);
         } else {
-            var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
-            $('#tt').tabs('add',{
+            $tt.tabs('add', {
                 title:title,
                 content:content,
                 closable:true

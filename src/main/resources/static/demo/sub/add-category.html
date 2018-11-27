@@ -15,94 +15,39 @@
     </style>
 </head>
 <body class="easyui-layout">
-<form id="ff" method="post">
-    <table cellpadding="5">
-        <tr>
-            <td>上级分类:</td>
-            <td>
-                <select id='select-1' style='width: 200px;' class="easyui-combobox select" name="rootId">
-                    <option value="-1">一级分类</option>
-                </select>
-                <span id='select-span'>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td>名称:</td>
-            <td><input class="easyui-textbox" type="text" name="name" data-options="required:true"/></td>
-        </tr>
+<div>
+    <form id="ff" method="post">
+        <table cellpadding="5">
+            <tr>
+                <td>上级分类:</td>
+                <td>
+                    <select id='select-1' style='width: 200px;' class="easyui-combotree select"
+                            url="/seller/categories/tree/easyui" name="pid">
 
-    </table>
-</form>
-<div style="text-align:left;padding:5px">
-    <a style='margin-left: 90px' href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+                    </select>
+                    <span id='select-span'>
+                </span>
+                </td>
+            </tr>
+            <tr>
+                <td>名称:</td>
+                <td><input class="easyui-textbox" type="text" name="name" data-options="required:true"/></td>
+            </tr>
+
+        </table>
+    </form>
+    <div style="text-align:left;padding:5px">
+        <a style='margin-left: 90px' href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+    </div>
 </div>
 <script>
-
-    let $select1 = $("#select-1");
-    var childrenList = {}
-
-    $.get("/seller/categories/list", function (data) {
-        let list = data.list;
-        var html_1 = "<option value='-1'>添加为一级分类</option>"
-
-        for (var i = 0; i < list.length; i++) {
-            let node = list[i];
-            if (node.pid != data.rootId) {
-                let e = childrenList[node.pid];
-                if (!e) {
-                    e = []
-                }
-                e.push(node)
-                childrenList[node.pid] = e
-            } else {
-                html_1 += "<option value='" + node.id + "'>" + node.name + "</option>"
-            }
-        }
-        $select1.html(html_1)
-
-        let select_2 =
-            "<select id='select-2' style='width: 200px;' class='easyui-combobox' name='pid'>" +
-            "    <option value='-1'>二级分类</option>" +
-            "</select>";
-
-
-        $select1.combobox({
-            onChange: function () {
-                var html = "";
-
-
-                if (this.value !== "-1") {
-                    html = "<select id='select-2' style='width: 200px;' class='easyui-combobox' name='pid'>" +
-                        "<option value='-1'>添加为二级分类</option>";
-
-                    let list = childrenList[this.value];
-                    if (list) {
-                        for (var i = 0; i < list.length; i++) {
-                            var node = list[i]
-                            html += "<option value='" + node.id + "'>" + node.name + "</option>"
-                        }
-                    }
-
-                    html += "</select>";
-                }
-
-                let $select = $("#select-span");
-                $select.html(html)
-                $.parser.parse($select);
-            }
-        })
-
-
-    })
-
 
     function submitForm() {
         $.post("/seller/categories/save", $("form").serialize(), function (data) {
             if (data.success) {
-                alert("成功")
+                $.messager.alert("消息提示", "成功")
             } else {
-                alert(data.message)
+                $.messager.alert("消息提示", data.message)
             }
         })
     }

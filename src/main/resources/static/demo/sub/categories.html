@@ -1,19 +1,96 @@
-<style>
-    .category {
-        width: 30%;
-        height: 300px;
-        background: #e6f0ff;
-        float: left;
-        margin: 2px;
-        overflow: scroll;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>Lazy loading nodes in TreeGrid - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.6.10/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.6.10/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.6.10/demo/demo.css">
+    <script type="text/javascript" src="../../jquery-easyui-1.6.10/jquery.min.js"></script>
+    <script type="text/javascript" src="../../jquery-easyui-1.6.10/jquery.easyui.min.js"></script>
+</head>
+<body>
+
+<table id="table-categories" title="商品分类列表" class="easyui-treegrid" style="width:100%;height:100%"
+        data-options="
+				url: '/seller/categories/list',
+				method: 'get',
+				rownumbers: true,
+				idField: 'id',
+				treeField: 'name'
+
+			">
+    <thead>
+    <tr>
+        <th field="name" width="220">分类名称</th>
+        <th field="id" data-options='formatter:editer' width="220">编辑</th>
+    </tr>
+    </thead>
+</table>
+<div id="add-category" class="easyui-window" title="添加分类" closed="true"
+        style="width:300px;height:200px;padding:10px;">
+    <form id="ff" method="post">
+        <input type="hidden" name="pid" id='pid'/>
+        <table cellpadding="5">
+            <tr>
+                <td>上级分类:</td>
+                <td id='p-name'>
+                </td>
+            </tr>
+            <tr>
+                <td>名称:</td>
+                <td><input class="easyui-textbox" type="text" name="name" data-options="required:true"/></td>
+            </tr>
+
+        </table>
+    </form>
+    <div style="text-align:left;padding:5px">
+        <a style='margin-left: 90px' href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+    </div>
+</div>
+<script>
+
+    function editer(id, row) {
+        let value = "<a href='javascript:addCategory(" + id + ",\"" + row.name + "\")' style='margin-right: 15px'>添加子类</a>"
+        if (!row.children && row.pid) {
+            value += "<a href='javascript:deleteCategory(" + id + ")'>删除</a>";
+        }
+
+        return value
     }
-</style>
-<div class="category">
 
-</div>
-<div class="category">
+    function deleteCategory(id) {
+        $.post("/seller/categories/delete", {id: id}, function (data) {
+            if (data.success) {
+                $.messager.alert("提示", "删除成功", undefined, function () {
+                    location.reload()
+                })
+            } else {
+                $.messager.alert("提示", data.message)
+            }
+        })
+    }
 
-</div>
-<div class="category">
+    function addCategory(id, name) {
+        $("#p-name").text(name)
+        $("#pid").val(id)
+        $("#add-category").window("open")
+    }
 
-</div>
+    function submitForm() {
+        $.post("/seller/categories/save", $("form").serialize(), function (data) {
+            if (data.success) {
+                $.messager.alert("提示", "添加成功", undefined, function () {
+                    location.reload()
+                })
+                $("#add-category").window("close")
+            } else {
+                $.messager.alert("提示", data.message)
+            }
+        })
+    }
+</script>
+</body>
+</html>
