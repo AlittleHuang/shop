@@ -41,7 +41,7 @@ public class ImageUploadUtil {
         if (SystemVariables.IS_WINDOWS_SYSTEM) {
             IMAGE_FILE_SAVE_PATH = "C:" + path;
         } else if (SystemVariables.IS_MAC_SYSTEM) {
-            IMAGE_FILE_SAVE_PATH = "/Volumes/COMMON" + path;
+            IMAGE_FILE_SAVE_PATH = "/Users/huangchengwei/Downloads/upload" + path;
         }
         else IMAGE_FILE_SAVE_PATH = path;
     }

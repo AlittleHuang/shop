@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Full Layout - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.6.10/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.6.10/themes/icon.css">
+    <script type="text/javascript" src="../../jquery-easyui-1.6.10/jquery.min.js"></script>
+    <script type="text/javascript" src="../../jquery-easyui-1.6.10/jquery.easyui.min.js"></script>
+    <link href="../../umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" type="text/css"/>
+    <style>
+        input {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form id="ff" method="post">
+        <input type="hidden" name="details" id="details">
+        <input type="hidden" name="coverImage" id="coverImage">
+        <table cellpadding="5">
+            <tr>
+                <td>商品分类:</td>
+                <td>
+                    <select style='width: 200px;' class="easyui-combotree select"
+                            url="/seller/categories/tree/easyui" name="categories.id">
+
+                    </select>
+                    <span id='select-span'>
+                </span>
+                </td>
+            </tr>
+            <tr>
+                <td>商品名称:</td>
+                <td><input class="easyui-textbox" type="text" name="name" data-options="required:false"/></td>
+            </tr>
+            <tr>
+                <td>商品库存:</td>
+                <td><input class="easyui-textbox" type="text" name="items[0].inventory" data-options="required:false"/>
+                </td>
+            </tr>
+            <tr>
+                <td>运费:</td>
+                <td><input class="easyui-textbox" type="text" name="freight" data-options="required:false"/></td>
+            </tr>
+            <tr>
+                <td>市场价格:</td>
+                <td><input class="easyui-textbox" type="text" name="items[0].marketPrice"
+                           data-options="required:false"/></td>
+            </tr>
+            <tr>
+                <td>商品价格:</td>
+                <td><input class="easyui-textbox" type="text" name="items[0].price" data-options="required:false"/></td>
+            </tr>
+            <tr>
+                <td>封面图片:</td>
+                <td>
+                    <img id="image-preview" src="images/image.png" style="max-width: 250px; max-height: 250px">
+                    <input type="file" onchange="subFile()" id="selectedFile" name="multipartFile">
+                </td>
+            </tr>
+            <tr>
+                <td>商品描述:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <script id="umEditor" type="text/plain"></script>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+    <div style="text-align:left;padding:5px">
+        <a style='margin-left: 90px' href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+    </div>
+</div>
+<script src="../../umeditor/umeditor.config.js"></script>
+<script src="../../umeditor/umeditor.min.js"></script>
+<script src="../../umeditor/lang/zh-cn/zh-cn.js"></script>
+<script src="../../common/js/ajaxfileupload.js"></script>
+<script>
+
+    function subFile() {
+
+        var app = this;
+        var fileName = $("#selectedFile").val();
+        if (!fileName) {
+            return;
+        }
+        var suffixIndex = fileName.lastIndexOf(".");
+        var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
+        if (suffix != "BMP" && suffix != "JPG" && suffix != "JPEG" && suffix != "PNG" && suffix != "GIF") {
+            layer.msg("文件类型应为BMP、JPG、JPEG、PNG、GIF！", {time: 1000});
+            return;
+        }
+        $.ajaxFileUpload
+        (
+            {
+                url: "/image-service/image/upload", //用于文件上传的服务器端请求地址
+                secureuri: false, //是否需要安全协议，一般设置为false
+                fileElementId: 'selectedFile', //文件上传域的ID
+                dataType: "TEXT", //返回值类型 一般设置为json
+                type: "POST",
+                success: function (data)  //服务器成功响应处理函数
+                {
+                    data = JSON.parse($(data).text())
+
+                    $("#coverImage").val(data.url)
+                    $("#image-preview").attr("src", data.url);
+                },
+                error: function (data, status, e)//服务器响应失败处理函数
+                {
+                    alert(e);
+                }
+            }
+        )
+        return false;
+    }
+
+    function submitForm() {
+        $("#details").val(um.getContent())
+        $.post("/seller/product/add", $("form").serialize(), function (data) {
+            if (data.success) {
+                $.messager.alert("消息提示", "成功")
+            } else {
+                $.messager.alert("消息提示", data.message)
+            }
+        })
+    }
+
+    $("#umEditor").css("width", "95%")
+    var um = UM.getEditor('umEditor');
+
+</script>
+
+</body>
+</html>

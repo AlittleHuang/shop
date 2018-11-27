@@ -115,9 +115,9 @@ public class CategoriesController {
 
         for (Categories category : categories) {
             Integer pid = category.getPid();
-            if (pid == null) {
+            if (pid == ROOT.getId()) {
                 list.add(map.get(category.getId()));
-            } else {
+            } else if (pid != null) {
                 map.get(pid).getChildren().add(map.get(category.getId()));
             }
         }

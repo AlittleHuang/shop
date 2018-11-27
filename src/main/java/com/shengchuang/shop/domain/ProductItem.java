@@ -42,5 +42,10 @@ public class ProductItem {
      */
     private Double price;
 
+    /**
+     *
+     */
+    private Double marketPrice;
+
 
 }
