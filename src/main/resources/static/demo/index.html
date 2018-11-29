@@ -17,10 +17,11 @@
 </div>
 
 
-<div data-options="region:'west',split:false,title:'West'" class="easyui-accordion" style="width:250px;">
+<div data-options="region:'west',split:false,title:'菜单'" class="easyui-accordion" style="width:250px;">
     <div title="商品管理">
         <li><a class="left-menu" href="sub/categories.html">商品分类管理</a></li>
         <li><a class="left-menu" href="sub/product-add.html">添加商品</a></li>
+        <li><a class="left-menu" href="sub/product-list.html">商品列表</a></li>
     </div>
     <div title="Help">
 
@@ -37,22 +38,41 @@
 
 
 <script>
+    let $tab = $('#tt');
+
+    $tab.tabs({
+        border: false,
+        fit: true,
+        tools: [{
+            text: '刷新',
+            iconCls: 'icon-reload',
+            handler: function () {
+                var currTab = $tab.tabs('getSelected');
+                if (!currTab) return;
+                let content = currTab.panel('options').content;
+                $tab.tabs('update', {
+                    tab: currTab,
+                    options: {}
+                });
+            }
+        }]
+    });
+
 
     $("a.left-menu").click(function () {
 
         let url = $(this).attr("href");
         let title = this.innerHTML;
 
-        let $tt = $('#tt');
-
-        var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
-        if ($tt.tabs('exists', title)) {
-            let tab = $tt.tabs('select', title);
+        var content = '<iframe frameborder="0" scrolling="auto" src="' + url + '" style="width:100%;height:99.5%;"></iframe>';
+        if ($tab.tabs('exists', title)) {
+            let tab = $tab.tabs('select', title);
         } else {
-            $tt.tabs('add', {
+            $tab.tabs('add', {
                 title:title,
                 content:content,
-                closable:true
+                closable: true,
+                fit: true,
             });
         }
         return false;

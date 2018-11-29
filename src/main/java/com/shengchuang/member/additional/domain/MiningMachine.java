@@ -16,7 +16,7 @@ import java.util.Date;
 public class MiningMachine {
 
     public static String[] names = {
-            "", "M1", "M2", "M3", "M4", "M5",
+            "", "M1", "M2", "M3", "M4", "M5", "N1", "N2", "N3",
     };
 
     /**

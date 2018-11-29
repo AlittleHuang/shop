@@ -42,7 +42,7 @@ public class Task {
 
     @Scheduled(cron = "0 * * * * ?")//1分钟运行一次
     public void automatVicirtualMatch() {
-        priceService.updatePrice(System.currentTimeMillis());
+        //priceService.updatePrice(System.currentTimeMillis());
     }
 
 

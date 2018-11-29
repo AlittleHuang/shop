@@ -2,11 +2,16 @@ package com.shengchuang.shop.web.controller.seller;
 
 import com.shengchuang.base.AbstractController;
 import com.shengchuang.common.mvc.view.JsonMap;
+import com.shengchuang.common.mvc.view.JsonVO;
+import com.shengchuang.common.util.StringUtil;
 import com.shengchuang.shop.domain.Product;
 import com.shengchuang.shop.domain.ProductItem;
+import com.shengchuang.shop.web.model.EasyUiGrid;
 import com.shengchuang.shop.web.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.View;
 
@@ -32,6 +37,17 @@ public class ProductController extends AbstractController {
         }
         commonDao.saveAll(items, ProductItem.class);
         return new JsonMap();
+    }
+
+
+    @RequestMapping("/seller/product/list")
+    public View pageList(){
+        Page<Product> page = productService.criteria().getPage(getPageRequestMap());
+        if("easyui".equals(request().getParameter("formatter"))){
+            EasyUiGrid<Product> grid = new EasyUiGrid<>(page.getContent(), page.getTotalElements());
+            return new JsonVO(grid);
+        }
+        return new JsonMap(page);
     }
 
 }

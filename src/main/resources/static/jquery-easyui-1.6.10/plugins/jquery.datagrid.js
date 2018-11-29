@@ -1786,6 +1786,7 @@ td=td.next();
 };
 };
 $.fn.datagrid=function(_1b3,_1b4){
+
 if(typeof _1b3=="string"){
 return $.fn.datagrid.methods[_1b3](this,_1b4);
 }
