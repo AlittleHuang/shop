@@ -10,6 +10,7 @@ import com.shengchuang.shop.web.model.EasyUiGrid;
 import com.shengchuang.shop.web.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +49,12 @@ public class ProductController extends AbstractController {
             return new JsonVO(grid);
         }
         return new JsonMap(page);
+    }
+
+    @RequestMapping("/app/product/{id}")
+    public View getOne(@PathVariable("id") Integer id){
+        Product one = productService.getOne(id);
+        return new JsonMap().add("data",one);
     }
 
 }

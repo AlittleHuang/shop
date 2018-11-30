@@ -25,7 +25,7 @@ public class Product {
     /**
      * 卖家
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id" ,nullable = false)
     private User seller;
 
