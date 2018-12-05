@@ -4,7 +4,6 @@ import com.shengchuang.common.mvc.repository.CommonDao;
 import com.shengchuang.common.mvc.repository.EntityInfo;
 import com.shengchuang.common.mvc.repository.query.Criteria;
 import com.shengchuang.common.util.ReflectUtil;
-import lombok.experimental.Delegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +15,7 @@ public class BaseService<T, ID> {
     protected Class<T> entityType;
 
     private CommonDao.EntityDao<T, ID> dao;
+    protected CommonDao commonDao;
 
     public BaseService(Class<T> entityType) {
         this.entityType = entityType;
@@ -28,6 +28,7 @@ public class BaseService<T, ID> {
 
     @Autowired
     void setCommonDao(CommonDao commonDao) {
+        this.commonDao = commonDao;
         dao = commonDao.getEntityDao(entityType);
     }
 

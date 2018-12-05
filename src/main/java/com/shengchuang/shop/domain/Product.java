@@ -16,6 +16,23 @@ import java.util.List;
 public class Product {
 
     /**
+     * 新建（待审核）
+     */
+    public static final int STATUS_NEW = 0;
+    /**
+     * 上架
+     */
+    public static final int STATUS_ONLINE = 1;
+    /**
+     * 下架
+     */
+    public static final int STATUS_OFFLINE = 2;
+    /**
+     * 删除
+     */
+    public static final int STATUS_DELETE = -1;
+
+    /**
      * id
      */
     @Id

@@ -3,7 +3,7 @@ package com.shengchuang.shop.web.controller.seller;
 import com.shengchuang.base.AbstractController;
 import com.shengchuang.common.mvc.view.JsonMap;
 import com.shengchuang.common.mvc.view.JsonVO;
-import com.shengchuang.common.util.StringUtil;
+import com.shengchuang.shop.domain.OrderItem;
 import com.shengchuang.shop.domain.Product;
 import com.shengchuang.shop.domain.ProductItem;
 import com.shengchuang.shop.web.model.EasyUiGrid;
@@ -55,6 +55,12 @@ public class ProductController extends AbstractController {
     public View getOne(@PathVariable("id") Integer id){
         Product one = productService.getOne(id);
         return new JsonMap().add("data",one);
+    }
+
+    @RequestMapping("/app/product/item/{id}")
+    public View getItem(@PathVariable("id") Integer id) {
+        ProductItem one = commonDao.getOne(ProductItem.class, id);
+        return new JsonMap().add("data", one);
     }
 
 }
