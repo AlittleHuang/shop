@@ -4,6 +4,11 @@ html, body, #app, .bg-page {
     background-color: #f8f8f8 !important;
 }
 
+img.full{
+    width: 100%;
+    height: 100px;
+}
+
 #app {
     position: fixed;
 }

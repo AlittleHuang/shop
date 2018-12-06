@@ -3,7 +3,6 @@ package com.shengchuang.shop.web.controller.seller;
 import com.shengchuang.base.AbstractController;
 import com.shengchuang.common.mvc.view.JsonMap;
 import com.shengchuang.common.mvc.view.JsonVO;
-import com.shengchuang.shop.domain.OrderItem;
 import com.shengchuang.shop.domain.Product;
 import com.shengchuang.shop.domain.ProductItem;
 import com.shengchuang.shop.web.model.EasyUiGrid;
