@@ -54,7 +54,7 @@ var vueLoader = {
 
 Vue.filter("toFixed2", function (value) {
     return (1 * value).toFixed(2)
-})
+});
 
 function limitNum(num, lo, hi) {
     return Math.max(lo, Math.min(hi, num))
@@ -62,15 +62,20 @@ function limitNum(num, lo, hi) {
 
 
 const index_main = [];
+
+routes.push({
+    path: '/',
+    component: vueLoader.load("components/index.html"),
+    children: index_main
+});
+
 index_main.push(
     {path: '/main', component: {template: "<router-link to='product/14'>商品详情</router-link>"}},
 );
 
-routes.push({
-    path: '/',
-    component: vueLoader.load("components/main.html"),
-    children: index_main
-});
+index_main.push(
+    {path: '/cart', component: vueLoader.load("components/cart.html")},
+);
 
 routes.push({
     path: '/product/:id',
