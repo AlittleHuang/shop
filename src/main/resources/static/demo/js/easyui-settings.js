@@ -56,11 +56,11 @@ $.fn.datagrid.methods.options = function (jq) {
             if (field && !column.formatter && (field.includes(".") || field.includes("["))) {
                 column.field_fix = field;
                 column.field = i + "-" + k;
-                column.formatter = function (value, row) {
+                column.formatter = function (value, row, index) {
                     try {
                         return eval("row." + this.field_fix)
                     } catch (e) {
-                        console.error("row." + value);
+                        console.error({field: this.field_fix, row: row, index: index});
                         console.error(e);
                         return null
                     }

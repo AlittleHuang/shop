@@ -1,0 +1,164 @@
+<template>
+    <div class='component-product bg-page component-page'>
+        <div class='popup-overlay' :class='{hide:hidePopup}'></div>
+        <div class='popup bg-df-color overflow-hidden' :class='{"no-height":hidePopup}'>
+            <div class='weui-icon-cancel btn-close-prpup' @click='togglePopup'></div>
+            <div class="weui-panel__hd overflow-scroll heigth-100">
+                <div class="weui-flex">
+                    <div class="width-33">
+                        <img width='100%' height='100%' :src="product.coverImage">
+                    </div>
+                    <div class="width-66">
+                        <div class="weui-media-box">
+                            <h3 class='real-price'>￥{{price}}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='clearfix'>
+                    <div class="float-left">
+                        <div class="weui-media-box">
+                            购买数量
+                        </div>
+                    </div>
+
+                    <div class="float-right">
+                        <div class="weui-media-box clearfix">
+                            <a class="buy-count-controller" @click='changeCount(-1)'>-</a>
+                            <input class='buy-count-controller' v-model='buyCount'/>
+                            <a class="buy-count-controller" @click='changeCount(1)'>+</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buy-commit">
+                    <div class="weui-flex__item text-center buy btn">
+                        确定
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="back-round-but">
+            <span @click="$router.go(-1)" class="icon icon-left"></span>
+        </div>
+        <div class='weui-tab__panel'>
+            <div class='product-content'>
+                <div class='product-preview'>
+                    <img width='100%' height='100%' :src="product.coverImage">
+                </div>
+
+                <div class="weui-panel">
+                    <div class="weui-panel__hd">
+                        <h3 style='color: black'>
+                            {{product.name}}
+                        </h3>
+                    </div>
+                    <div class="weui-panel__bd">
+                        <div class="weui-media-box weui-media-box_text">
+                            <h4 class="weui-media-box__title real-price">
+                                ￥{{price}}
+                            </h4>
+                            <ul class="weui-media-box__info weui-flex">
+                                <li class="weui-media-box__info__meta weui-flex__item text-left">
+                                    <span>价格</span>
+                                    <del>￥{{marketPrice}}</del>
+                                </li>
+                                <li class="weui-media-box__info__meta weui-flex__item text-left">
+                                    快递￥{{product.freight | toFixed2}}
+                                </li>
+                                <!--<li class="weui-media-box__info__meta weui-flex__item text-center">月销量9999</li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="weui-loadmore weui-loadmore_line info-title">
+                    <span class="weui-loadmore__tips bg-page">商品详情</span>
+                </div>
+
+                <div class="weui-panel">
+                    <div class="weui-panel__hd">
+                        <div class='weui-media-box weui-media-box_text' v-html='product.details'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="weui-flex weui-tabbar botton-bar">
+            <div class="weui-flex__item text-center cart btn" @click='togglePopup'>
+                加入购物车
+            </div>
+            <div class="weui-flex__item text-center buy btn" @click='togglePopup'>
+                立即购买
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    //toggle
+    function toPricrString(priceArrs) {
+        var max = Number.MIN_SAFE_INTEGER;
+        var min = Number.MAX_SAFE_INTEGER;
+        for (var k in priceArrs) {
+            max = Math.max(priceArrs[k], max);
+            min = Math.min(priceArrs[k], min);
+        }
+        return max === min ? max.toFixed(2) : min.toFixed(2) + " - " + max.toFixed(2)
+    }
+
+    exports({
+        data: function () {
+            return {
+                buyCount: 1,
+                hidePopup: true,
+                product: {},
+                tabbar_active_index: this.$router.path
+            }
+        },
+
+        methods: {
+            tabbarActive: function (index) {
+                this.$data.tabbar_active_index = index;
+            },
+            isTabbarActive: function (path) {
+                return this.$route.path === path;
+            },
+            togglePopup: function () {
+                this.hidePopup = !this.hidePopup;
+                this.buyCount = 1;
+            },
+            changeCount: function (change) {
+                this.buyCount = limitNum(this.buyCount + change, 1, 10000)
+            }
+        },
+        computed: {
+            price: function (data) {
+                if (!data.product.items) return;
+                var items = data.product.items.map(function (item) {
+                    return item.price
+                });
+                return toPricrString(items)
+            },
+            marketPrice: function (data) {
+                if (!data.product.items) return;
+                var items = data.product.items.map(function (item) {
+                    return item.marketPrice
+                });
+                return toPricrString(items)
+            }
+        },
+
+        props: ['id'],
+
+        created: function () {
+            var htis_ = this;
+            axios.get("/app/product/" + this.id).then(function (resp) {
+                var data = resp.data;
+                htis_.product = data.data
+            })
+        }
+    })
+
+</script>
