@@ -4,6 +4,124 @@ html, body, #app, .bg-page {
     background-color: #f8f8f8 !important;
 }
 
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+    will-change: transform;
+    transition: all 500ms;
+    position: absolute;
+}
+.slide-right-enter {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+}
+.slide-right-leave-active {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+}
+.slide-left-enter {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+}
+.slide-left-leave-active {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+}
+
+.fade-enter {
+    opacity:0;
+}
+.fade-leave{
+    opacity:1;
+}
+.fade-enter-active{
+    will-change: transform;
+    transition:opacity .5s;
+}
+.fade-leave-active{
+    will-change: transform;
+    opacity:0;
+    transition:opacity .1s;
+}
+
+.no-height {
+    height: 0 !important;
+}
+
+.heigth-100 {
+    height: 100% !important;
+}
+
+.overflow-scroll {
+    overflow: scroll !important;
+}
+
+.overflow-hidden {
+    overflow: hidden !important;
+}
+
+.width-33 {
+    width: 33%;
+}
+
+.width-50 {
+    width: 50%;
+}
+
+.width-66 {
+    width: 66%;
+}
+
+.hide {
+    display: none;
+}
+
+.bg-df-color {
+    background-color: #f8f8f8 !important;
+}
+
+.bg-page {
+    position: absolute;
+}
+
+.popup {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 80%;
+    z-index: 10400;
+    background: #fff;
+    box-sizing: border-box;
+    overflow: auto;
+    transition: all 400ms;
+    -webkit-transition-duration: 400ms;
+    transition-duration: 400ms;
+}
+
+.popup-overlay {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 10200;
+    -webkit-transition-duration: 400ms;
+    transition-duration: 400ms;
+}
+
+.btn-close-prpup {
+    position: absolute;
+    float: right;
+    top: 10px;
+    right: 10px;
+    margin: 10px;
+    z-index: 10600;
+    font-size: 30px;
+}
+
 #app {
     position: fixed;
 }
@@ -95,20 +213,25 @@ html, body, #app, .bg-page {
     margin-bottom: -20px;
 }
 
-#component_product .botton-bar {
+.component-product {
+    position: absolute;
+}
+
+.component-product .botton-bar {
     height: 45px;
 }
 
-#component_product .btn {
+.component-product .btn {
     line-height: 45px;
     color: white;
 }
 
-#component_product .buy {
+.component-product .buy {
     background: #FF0036;
+    font-size: 16px;
 }
 
-#component_product .cart {
+.component-product .cart {
     background: #FF9500;
 }
 
@@ -119,4 +242,38 @@ html, body, #app, .bg-page {
 
 .real-price {
     color: red;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+.buy-count-controller {
+    width: 30px;
+    float: left;
+    line-height: 25px;
+    margin: 0 1px;
+    background: #eee;
+    border: 1px;
+    text-align: center;
+}
+
+.buy-commit {
+    position: absolute;
+    left: 0;
+    bottom: 24px;
+    width: 100%;
 }
