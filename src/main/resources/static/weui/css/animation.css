@@ -1,0 +1,42 @@
+/*动画效果  slide-right slide-left 左滑右滑*/
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+    will-change: transform;
+    transition: all 500ms;
+    position: absolute;
+}
+.slide-right-enter {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+}
+.slide-right-leave-active {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+}
+.slide-left-enter {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+}
+.slide-left-leave-active {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+}
+
+/*动画效果  fade 淡入淡出*/
+.fade-enter {
+    opacity:0;
+}
+.fade-leave{
+    opacity:1;
+}
+.fade-enter-active{
+    will-change: transform;
+    transition:opacity .5s;
+}
+.fade-leave-active{
+    will-change: transform;
+    opacity:0;
+    transition:opacity .1s;
+}

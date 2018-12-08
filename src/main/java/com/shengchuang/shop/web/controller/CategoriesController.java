@@ -20,7 +20,7 @@ import java.util.Map;
 public class CategoriesController {
 
     @Autowired
-    CategoriesService categoriesService;
+    private CategoriesService categoriesService;
     private static Categories ROOT;
 
     @RequestMapping("/seller/categories/save")
@@ -34,8 +34,6 @@ public class CategoriesController {
         Assert.notNull(one, "请选择上级分类");
 
         Categories categories = new Categories(pid, name);
-
-
 
         try {
             categoriesService.save(categories);

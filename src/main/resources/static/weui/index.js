@@ -1,14 +1,15 @@
 const routes = [];
+
 var vueLoader = {
     fixfastJson: function (json) {
         var traversed = [];
         return recode(json, json);
 
-        function recode($, data) {
+        function recode($, data) {//循环引用 Circular reference
             if (traversed.includes(data)) {
                 return data
             }
-            traversed.push(data)
+            traversed.push(data);
 
             if (typeof data !== "object") {
                 return data;
@@ -52,6 +53,13 @@ var vueLoader = {
     }
 };
 
+axios.interceptors.response.use(function (resp) {
+    if (typeof resp.data === "object") {
+        vueLoader.fixfastJson(resp.data);
+    }
+    return resp
+});
+
 Vue.filter("toFixed2", function (value) {
     return (1 * value).toFixed(2)
 });
@@ -70,7 +78,7 @@ routes.push({
 });
 
 index_main.push(
-    {path: '/main', component: {template: "<router-link to='product/14'>商品详情</router-link>"}},
+    {path: '/main', component: {template: "<router-link to='product/1'>商品详情</router-link>"}},
 );
 
 index_main.push(

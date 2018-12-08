@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
-@Entity(name = "cart_itme")
+@Entity(name = "cart_item")
 public class CartItem {
 
     /**
@@ -45,7 +45,17 @@ public class CartItem {
      * 商品
      */
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", updatable = false, insertable = false)
     private ProductItem item;
 
+    @Column(name = "item_id")
+    private Integer productItemId;
+
+    public CartItem(Integer userId, Integer productItemId) {
+        this.userId = userId;
+        this.count = 0;
+        this.productItemId = productItemId;
+        status = 0;
+        time = new Date();
+    }
 }

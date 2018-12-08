@@ -25,14 +25,14 @@
                     <div class="float-right">
                         <div class="weui-media-box clearfix">
                             <a class="buy-count-controller" @click='changeCount(-1)'>-</a>
-                            <input class='buy-count-controller' v-model='buyCount'/>
+                            <input class='buy-count-controller' v-model='item.count'/>
                             <a class="buy-count-controller" @click='changeCount(1)'>+</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="buy-commit">
-                    <div class="weui-flex__item text-center buy btn">
+                    <div class="weui-flex__item text-center buy btn" @click='commitBuyInfo'>
                         确定
                     </div>
                 </div>
@@ -86,10 +86,10 @@
 
         </div>
         <div class="weui-flex weui-tabbar botton-bar">
-            <div class="weui-flex__item text-center cart btn" @click='togglePopup'>
+            <div class="weui-flex__item text-center cart btn" @click='togglePopup("cart")'>
                 加入购物车
             </div>
-            <div class="weui-flex__item text-center buy btn" @click='togglePopup'>
+            <div class="weui-flex__item text-center buy btn" @click='togglePopup("buy")'>
                 立即购买
             </div>
         </div>
@@ -97,8 +97,8 @@
 </template>
 
 <script>
-    //toggle
-    function toPricrString(priceArrs) {
+
+    function __toPricrString(priceArrs) {
         var max = Number.MIN_SAFE_INTEGER;
         var min = Number.MAX_SAFE_INTEGER;
         for (var k in priceArrs) {
@@ -111,26 +111,25 @@
     exports({
         data: function () {
             return {
-                buyCount: 1,
+                popupType: undefined,
                 hidePopup: true,
                 product: {},
-                tabbar_active_index: this.$router.path
+                tabbar_active_index: this.$router.path,
+                item: {
+                    id: undefined,
+                    count: 1
+                }
             }
         },
 
         methods: {
-            tabbarActive: function (index) {
-                this.$data.tabbar_active_index = index;
-            },
-            isTabbarActive: function (path) {
-                return this.$route.path === path;
-            },
-            togglePopup: function () {
+            togglePopup: function (popupType) {
                 this.hidePopup = !this.hidePopup;
-                this.buyCount = 1;
+                this.item.count = 1;
+                this.popupType = popupType
             },
             changeCount: function (change) {
-                this.buyCount = limitNum(this.buyCount + change, 1, 10000)
+                this.item.count = limitNum(this.item.count + change, 1, 10000)
             },
             loadData: function () {
                 var htis_ = this;
@@ -138,8 +137,36 @@
                     var data = resp.data;
                     htis_.product = data.data
                 });
-            }
+            },
+            commitBuyInfo: function () {
+                let popupType = this.popupType;
+                console.log(popupType);
 
+                let item = this.item;
+                if (!item.id && this.product.items.length === 1) {
+                    item.id = this.product.items[0].id;
+                }
+                if (!item.id) {
+                    weui.alert("请选择规格分类");
+                    return;
+                }
+
+                if ("cart" === popupType) {//确认加入购物车
+
+                    axios.post("/buyer/cart/add", Qs.stringify(item)).then(function (resp) {
+                        if (resp.data.success) {
+                            weui.toast("成功加入购物车");
+                        } else {
+                            weui.alert(resp.data.message);
+                        }
+                    }).catch(function (err) {
+                        weui.alert("加入购物车失败")
+                    })
+
+                }
+
+                this.togglePopup();
+            }
         },
         computed: {
             price: function (data) {
@@ -147,14 +174,14 @@
                 var items = data.product.items.map(function (item) {
                     return item.price
                 });
-                return toPricrString(items)
+                return __toPricrString(items)
             },
             marketPrice: function (data) {
                 if (!data.product.items) return;
                 var items = data.product.items.map(function (item) {
                     return item.marketPrice
                 });
-                return toPricrString(items)
+                return __toPricrString(items)
             },
 
         },

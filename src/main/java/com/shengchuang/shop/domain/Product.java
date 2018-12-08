@@ -42,9 +42,9 @@ public class Product {
     /**
      * 卖家
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id" ,nullable = false)
-    private User seller;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Store store;
 
     /**
      * 状态

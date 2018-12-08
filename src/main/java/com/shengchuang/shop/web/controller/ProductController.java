@@ -1,10 +1,13 @@
-package com.shengchuang.shop.web.controller.seller;
+package com.shengchuang.shop.web.controller;
 
 import com.shengchuang.base.AbstractController;
 import com.shengchuang.common.mvc.view.JsonMap;
 import com.shengchuang.common.mvc.view.JsonVO;
+import com.shengchuang.common.util.Assert;
+import com.shengchuang.shop.domain.CartItem;
 import com.shengchuang.shop.domain.Product;
 import com.shengchuang.shop.domain.ProductItem;
+import com.shengchuang.shop.service.StoreService;
 import com.shengchuang.shop.web.model.EasyUiGrid;
 import com.shengchuang.shop.web.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +24,13 @@ import java.util.List;
 public class ProductController extends AbstractController {
     @Autowired
     ProductService productService;
+    @Autowired
+    private StoreService storeService;
 
     @PostMapping("/seller/product/add")
     public View addProduct(Product product) {
         List<ProductItem> items = product.getItems();
-        product.setSeller(userService.getOne(1));
+        product.setStore(storeService.getOne(1));
         product.setStatus(0);
         product.setItems(null);
         Product save = productService.save(product);

@@ -1,89 +1,222 @@
 <template>
-    <div>
-        <div class="weui-panel weui-panel_access weui-cells_checkbox">
+    <div class='component-cart'>
+        <!-- 列表 -->
+        <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
             <div class="weui-panel__hd">
-                <div class="weui-cell__hd">
+                <div class="weui-cell__hd position-relative">
                     <label>
-                        <input type="checkbox" class="weui-check" checked="checked">
+                        <input type="checkbox" class="weui-check" v-model='store.checked' @click='selectStore(store)'>
                         <i class="weui-icon-checked"></i>
                     </label>
-                    <span>店铺名称</span>
+                    <span>{{store.store.name}}</span>
+                </div>
+                <div class='cart-edit'>
+                    <a>编辑</a>
                 </div>
             </div>
             <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box weui-media-box_appmsg" v-for='item in store.items'>
                     <label>
                         <div class="weui-cell__hd">
-                            <input type="checkbox" class="weui-check" checked="checked">
+                            <input type="checkbox" class="weui-check" @click='selectItem(item,store)'
+                                    v-model='item.checked'>
                             <i class="weui-icon-checked"></i>
                         </div>
                     </label>
-                    <div class="weui-media-box__hd">
-                        <img class="weui-media-box__thumb"
-                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAeFBMVEUAwAD///+U5ZTc9twOww7G8MYwzDCH4YcfyR9x23Hw+/DY9dhm2WZG0kbT9NP0/PTL8sux7LFe115T1VM+zz7i+OIXxhes6qxr2mvA8MCe6J6M4oz6/frr+us5zjn2/fa67rqB4IF13XWn6ad83nxa1loqyirn+eccHxx4AAAC/klEQVRo3u2W2ZKiQBBF8wpCNSCyLwri7v//4bRIFVXoTBBB+DAReV5sG6lTXDITiGEYhmEYhmEYhmEYhmEY5v9i5fsZGRx9PyGDne8f6K9cfd+mKXe1yNG/0CcqYE86AkBMBh66f20deBc7wA/1WFiTwvSEpBMA2JJOBsSLxe/4QEEaJRrASP8EVF8Q74GbmevKg0saa0B8QbwBdjRyADYxIhqxAZ++IKYtciPXLQVG+imw+oo4Bu56rjEJ4GYsvPmKOAB+xlz7L5aevqUXuePWVhvWJ4eWiwUQ67mK51qPj4dFDMlRLBZTqF3SDvmr4BwtkECu5gHWPkmDfQh02WLxXuvbvC8ku8F57GsI5e0CmUwLz1kq3kD17R1In5816rGvQ5VMk5FEtIiWislTffuDpl/k/PzscdQsv8r9qWq4LRWX6tQYtTxvI3XyrwdyQxChXioOngH3dLgOFjk0all56XRi/wDFQrGQU3Os5t0wJu1GNtNKHdPqYaGYQuRDfbfDf26AGLYSyGS3ZAK4S8XuoAlxGSdYMKwqZKM9XJMtyqXi7HX/CiAZS6d8bSVUz5J36mEMFDTlAFQzxOT1dzLRljjB6+++ejFqka+mXIe6F59mw22OuOw1F4T6lg/9VjL1rLDoI9Xzl1MSYDNHnPQnt3D1EE7PrXjye/3pVpr1Z45hMUdcACc5NVQI0bOdS1WA0wuz73e7/5TNqBPhQXPEFGJNV2zNqWI7QKBd2Gn6AiBko02zuAOXeWIXjV0jNqdKegaE/kJQ6Bfs4aju04lMLkA2T5wBSYPKDGF3RKhFYEa6A1L1LG2yacmsaZ6YPOSAMKNsO+N5dNTfkc5Aqe26uxHpx7ZirvgCwJpWq/lmX1hA7LyabQ34tt5RiJKXSwQ+0KU0V5xg+hZrd4Bn1n4EID+WkQdgLfRNtvil9SPfwy+WQ7PFBWQz6dGWZBLkeJFXZGCfLUjCgGgqXo5TuSu3cugdcTv/HjqnBTEMwzAMwzAMwzAMwzAMw/zf/AFbXiOA6frlMAAAAABJRU5ErkJggg=="
-                             alt="">
-                    </div>
+                    <router-link :to='("/product/" + item.item.product.id)'>
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" :src="item.item.product.coverImage" alt="">
+                        </div>
+                    </router-link>
                     <div class="weui-media-box__bd">
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                        <p class="weui-media-box__desc">{{item.item.product.name}}</p>
                         <div class="weui-media-box__desc" style="margin-top: 8px;">
-                            <span class="real-price" style="line-height: 24px;">￥100.00</span>
+                            <span class="real-price" style="line-height: 24px;">￥{{item.item.price | toFixed2}}</span>
                             <span class="clearfix float-right">
-                                <a class="buy-count-controller">-</a>
-                                <input class="buy-count-controller">
-                                <a class="buy-count-controller">+</a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="weui-media-box weui-media-box_appmsg">
-                    <label>
-                        <div class="weui-cell__hd">
-                            <input type="checkbox" class="weui-check" checked="checked">
-                            <i class="weui-icon-checked"></i>
-                        </div>
-                    </label>
-                    <div class="weui-media-box__hd">
-                        <img class="weui-media-box__thumb"
-                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAeFBMVEUAwAD///+U5ZTc9twOww7G8MYwzDCH4YcfyR9x23Hw+/DY9dhm2WZG0kbT9NP0/PTL8sux7LFe115T1VM+zz7i+OIXxhes6qxr2mvA8MCe6J6M4oz6/frr+us5zjn2/fa67rqB4IF13XWn6ad83nxa1loqyirn+eccHxx4AAAC/klEQVRo3u2W2ZKiQBBF8wpCNSCyLwri7v//4bRIFVXoTBBB+DAReV5sG6lTXDITiGEYhmEYhmEYhmEYhmEY5v9i5fsZGRx9PyGDne8f6K9cfd+mKXe1yNG/0CcqYE86AkBMBh66f20deBc7wA/1WFiTwvSEpBMA2JJOBsSLxe/4QEEaJRrASP8EVF8Q74GbmevKg0saa0B8QbwBdjRyADYxIhqxAZ++IKYtciPXLQVG+imw+oo4Bu56rjEJ4GYsvPmKOAB+xlz7L5aevqUXuePWVhvWJ4eWiwUQ67mK51qPj4dFDMlRLBZTqF3SDvmr4BwtkECu5gHWPkmDfQh02WLxXuvbvC8ku8F57GsI5e0CmUwLz1kq3kD17R1In5816rGvQ5VMk5FEtIiWislTffuDpl/k/PzscdQsv8r9qWq4LRWX6tQYtTxvI3XyrwdyQxChXioOngH3dLgOFjk0all56XRi/wDFQrGQU3Os5t0wJu1GNtNKHdPqYaGYQuRDfbfDf26AGLYSyGS3ZAK4S8XuoAlxGSdYMKwqZKM9XJMtyqXi7HX/CiAZS6d8bSVUz5J36mEMFDTlAFQzxOT1dzLRljjB6+++ejFqka+mXIe6F59mw22OuOw1F4T6lg/9VjL1rLDoI9Xzl1MSYDNHnPQnt3D1EE7PrXjye/3pVpr1Z45hMUdcACc5NVQI0bOdS1WA0wuz73e7/5TNqBPhQXPEFGJNV2zNqWI7QKBd2Gn6AiBko02zuAOXeWIXjV0jNqdKegaE/kJQ6Bfs4aju04lMLkA2T5wBSYPKDGF3RKhFYEa6A1L1LG2yacmsaZ6YPOSAMKNsO+N5dNTfkc5Aqe26uxHpx7ZirvgCwJpWq/lmX1hA7LyabQ34tt5RiJKXSwQ+0KU0V5xg+hZrd4Bn1n4EID+WkQdgLfRNtvil9SPfwy+WQ7PFBWQz6dGWZBLkeJFXZGCfLUjCgGgqXo5TuSu3cugdcTv/HjqnBTEMwzAMwzAMwzAMwzAMw/zf/AFbXiOA6frlMAAAAABJRU5ErkJggg=="
-                             alt="">
-                    </div>
-                    <div class="weui-media-box__bd">
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                        <div class="weui-media-box__desc" style="margin-top: 8px;">
-                            <span class="real-price" style="line-height: 24px;">￥100.00</span>
-                            <span class="clearfix float-right">
-                                <a class="buy-count-controller">-</a>
-                                <input class="buy-count-controller">
-                                <a class="buy-count-controller">+</a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="weui-media-box weui-media-box_appmsg">
-                    <label>
-                        <div class="weui-cell__hd">
-                            <input type="checkbox" class="weui-check" checked="checked">
-                            <i class="weui-icon-checked"></i>
-                        </div>
-                    </label>
-                    <div class="weui-media-box__hd">
-                        <img class="weui-media-box__thumb"
-                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAeFBMVEUAwAD///+U5ZTc9twOww7G8MYwzDCH4YcfyR9x23Hw+/DY9dhm2WZG0kbT9NP0/PTL8sux7LFe115T1VM+zz7i+OIXxhes6qxr2mvA8MCe6J6M4oz6/frr+us5zjn2/fa67rqB4IF13XWn6ad83nxa1loqyirn+eccHxx4AAAC/klEQVRo3u2W2ZKiQBBF8wpCNSCyLwri7v//4bRIFVXoTBBB+DAReV5sG6lTXDITiGEYhmEYhmEYhmEYhmEY5v9i5fsZGRx9PyGDne8f6K9cfd+mKXe1yNG/0CcqYE86AkBMBh66f20deBc7wA/1WFiTwvSEpBMA2JJOBsSLxe/4QEEaJRrASP8EVF8Q74GbmevKg0saa0B8QbwBdjRyADYxIhqxAZ++IKYtciPXLQVG+imw+oo4Bu56rjEJ4GYsvPmKOAB+xlz7L5aevqUXuePWVhvWJ4eWiwUQ67mK51qPj4dFDMlRLBZTqF3SDvmr4BwtkECu5gHWPkmDfQh02WLxXuvbvC8ku8F57GsI5e0CmUwLz1kq3kD17R1In5816rGvQ5VMk5FEtIiWislTffuDpl/k/PzscdQsv8r9qWq4LRWX6tQYtTxvI3XyrwdyQxChXioOngH3dLgOFjk0all56XRi/wDFQrGQU3Os5t0wJu1GNtNKHdPqYaGYQuRDfbfDf26AGLYSyGS3ZAK4S8XuoAlxGSdYMKwqZKM9XJMtyqXi7HX/CiAZS6d8bSVUz5J36mEMFDTlAFQzxOT1dzLRljjB6+++ejFqka+mXIe6F59mw22OuOw1F4T6lg/9VjL1rLDoI9Xzl1MSYDNHnPQnt3D1EE7PrXjye/3pVpr1Z45hMUdcACc5NVQI0bOdS1WA0wuz73e7/5TNqBPhQXPEFGJNV2zNqWI7QKBd2Gn6AiBko02zuAOXeWIXjV0jNqdKegaE/kJQ6Bfs4aju04lMLkA2T5wBSYPKDGF3RKhFYEa6A1L1LG2yacmsaZ6YPOSAMKNsO+N5dNTfkc5Aqe26uxHpx7ZirvgCwJpWq/lmX1hA7LyabQ34tt5RiJKXSwQ+0KU0V5xg+hZrd4Bn1n4EID+WkQdgLfRNtvil9SPfwy+WQ7PFBWQz6dGWZBLkeJFXZGCfLUjCgGgqXo5TuSu3cugdcTv/HjqnBTEMwzAMwzAMwzAMwzAMw/zf/AFbXiOA6frlMAAAAABJRU5ErkJggg=="
-                             alt="">
-                    </div>
-                    <div class="weui-media-box__bd">
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                        <div class="weui-media-box__desc" style="margin-top: 8px;">
-                            <span class="real-price" style="line-height: 24px;">￥100.00</span>
-                            <span class="clearfix float-right">
-                                <a class="buy-count-controller">-</a>
-                                <input class="buy-count-controller">
-                                <a class="buy-count-controller">+</a>
+                                <a class="buy-count-controller" @click='changeCount(item,-1)'>-</a>
+                                <input class="buy-count-controller" v-model='item.count' @change='changeCount(item)'>
+                                <a class="buy-count-controller" @click='changeCount(item,1)'>+</a>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- 底部结算 -->
+
+        <div class='cart-footer clearfix'>
+            <div class="weui-cells_checkbox float-left width-33">
+                <label>
+                    <input type="checkbox" class="weui-check" v-model='allChecked' @click='checkAll'>
+                    <i class="weui-icon-checked"></i>
+                    <span>全选</span>
+                </label>
+            </div>
+            <div class="float-left width-67">
+                <label class='text-align-center float-right settlement-button'
+                        @click='settlement'>
+                    结算
+                </label>
+                <label class='float-right' style='margin-right: 10px'>
+                    <span>合计</span><span class='real-price'>￥{{totalFee | toFixed2}}</span>
+                </label>
+            </div>
+        </div>
+
     </div>
 </template>
+
+<script>
+
+    exports({
+        data: function () {
+            return {
+                allChecked: false,
+                totalFee: 0,
+                list: []
+            };
+        },
+
+        computed: {},
+
+        methods: {
+            loadData: function () {
+                var this_ = this;
+                axios.get("/buyer/cart/list").then(function (resp) {
+                    var list = resp.data.list;
+                    var map = {};
+                    for (var key in list) {
+                        var item = list[key];
+                        var store = item.item.product.store;
+                        var storeId = store.id;
+                        map[storeId] = map[storeId] || {store: store, items: []};
+                        map[storeId].items.push(item);
+                        map[storeId].checked = map[storeId].store.checked || false;
+                        item.checked = item.checked || false;
+                    }
+                    for (var key in map) {
+                        this_.list.push(map[key])
+                    }
+                })
+            },
+
+            changeCount: function (item, change) {
+                if (change) {
+                    item.count = Math.max(item.count + change, 1)
+                }
+                clearTimeout(item.updateCountTimeOut)
+                item.updateCountTimeOut = setTimeout(function () {
+                    axios.post("/buyer/cart/item/count/update", Qs.stringify({cartId: item.id, count: item.count}))
+                }, 800)
+            },
+
+            isSelectedAll: function () {
+                let list = this.list;
+                for (var i in list) {
+                    if (!list[i].checked) {
+                        return false
+                    }
+                }
+                return true
+            },
+
+            setSelectedAll(val) {
+                let list = this.list;
+                if (!list) return;
+                for (let i in list) {
+                    list[i].checked = val;
+                    let items = list[i].items;
+                    for (let j in items) {
+                        items[j].checked = val
+                    }
+                }
+            },
+            changeStoreSelect: function (store) {
+                if (store.checked) {
+                    this.allChecked = this.isSelectedAll();
+                } else {
+                    this.allChecked = false;
+                }
+            }
+            ,
+
+            selectStore: function (store) {
+                store.checked = !store.checked;
+                for (let i in store.items) {
+                    store.items[i].checked = store.checked;
+                }
+                this.changeStoreSelect(store)
+            },
+            selectItem: function (item, store) {
+                item.checked = !item.checked;
+                if (item.checked) {
+                    for (let i in store.items) {
+                        store.checked = true;
+                        if (!store.items[i].checked) {
+                            store.checked = false;
+                            break;
+                        }
+                    }
+                } else {
+                    store.checked = false;
+                }
+                this.changeStoreSelect(store)
+            },
+            checkAll: function () {
+                this.allChecked = !this.allChecked
+                this.setSelectedAll(this.allChecked)
+            },
+            settlement: function () {
+                var list = this.list;
+                var postData = [];
+                for (let i = 0; i < list.length; i++) {
+                    let items = list[i].items;
+                    for (let j = 0; j < items.length; j++) {
+                        let item = items[j];
+                        if (item.checked) {
+                            postData.push(item.id)
+                        }
+                    }
+                }
+                if (postData.length === 0) {
+                    weui.alert("还没有选择商品哦")
+                    return;
+                }
+
+                postData = Qs.stringify({ids:postData})
+                console.log(postData);
+
+                axios.post("",postData)
+
+            }
+        },
+
+        watch: {
+            list: {
+                deep: true,
+                handler: function (list) {
+                    this.totalFee = 0;
+                    for (let i = 0; i < list.length; i++) {
+                        let items = list[i].items;
+                        for (let j = 0; j < items.length; j++) {
+                            let item = items[j];
+                            if (item.checked) {
+                                this.totalFee += item.count * item.item.price
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        beforeRouteUpdate: function () {
+            this.loadData();
+        },
+
+        created: function () {
+            this.$nextTick(this.loadData());
+        }
+    });
+
+</script>
