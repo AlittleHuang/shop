@@ -131,7 +131,15 @@
             },
             changeCount: function (change) {
                 this.buyCount = limitNum(this.buyCount + change, 1, 10000)
+            },
+            loadData: function () {
+                var htis_ = this;
+                axios.get("/app/product/" + this.id).then(function (resp) {
+                    var data = resp.data;
+                    htis_.product = data.data
+                });
             }
+
         },
         computed: {
             price: function (data) {
@@ -147,17 +155,20 @@
                     return item.marketPrice
                 });
                 return toPricrString(items)
+            },
+
+        },
+
+        watch: {
+            id: function () {
+                this.loadData()
             }
         },
 
         props: ['id'],
 
         created: function () {
-            var htis_ = this;
-            axios.get("/app/product/" + this.id).then(function (resp) {
-                var data = resp.data;
-                htis_.product = data.data
-            })
+            this.loadData()
         }
     })
 
