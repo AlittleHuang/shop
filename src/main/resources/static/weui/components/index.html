@@ -1,7 +1,9 @@
 <template>
     <div class="weui-tab component-page">
         <div class="weui-tab__panel">
-            <router-view></router-view>
+            <transition name='fade'>
+                <router-view></router-view>
+            </transition>
         </div>
         <div class="weui-tabbar">
             <router-link to="/main" append class="weui-tabbar__item" :class="{ 'weui-bar__item_on': isTabbarActive('/main') }">
