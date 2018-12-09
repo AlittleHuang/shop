@@ -86,18 +86,15 @@
                 axios.get("/buyer/cart/list").then(function (resp) {
                     var list = resp.data.list;
                     var map = {};
-                    for (var key in list) {
-                        var item = list[key];
-                        var store = item.item.product.store;
-                        var storeId = store.id;
-                        map[storeId] = map[storeId] || {store: store, items: []};
+                    for (var i = 0; i < list.length; i++) {
+                        var item = list[i];
+                        var storeId = item.item.product.id;
+                        map[storeId] = map[storeId] || {store: item.item.product.store, items: []};
                         map[storeId].items.push(item);
                         map[storeId].checked = map[storeId].store.checked || false;
                         item.checked = item.checked || false;
                     }
-                    for (var key in map) {
-                        this_.list.push(map[key])
-                    }
+                    for (var key in map) this_.list.push(map[key]);
                 })
             },
 
@@ -105,7 +102,7 @@
                 if (change) {
                     item.count = Math.max(item.count + change, 1)
                 }
-                clearTimeout(item.updateCountTimeOut)
+                clearTimeout(item.updateCountTimeOut);
                 item.updateCountTimeOut = setTimeout(function () {
                     axios.post("/buyer/cart/item/count/update", Qs.stringify({cartId: item.id, count: item.count}))
                 }, 800)
@@ -113,7 +110,7 @@
 
             isSelectedAll: function () {
                 let list = this.list;
-                for (var i in list) {
+                for (var i = 0; i < list.length; i++) {
                     if (!list[i].checked) {
                         return false
                     }
@@ -164,7 +161,7 @@
                 this.changeStoreSelect(store)
             },
             checkAll: function () {
-                this.allChecked = !this.allChecked
+                this.allChecked = !this.allChecked;
                 this.setSelectedAll(this.allChecked)
             },
             settlement: function () {
@@ -180,15 +177,10 @@
                     }
                 }
                 if (postData.length === 0) {
-                    weui.alert("还没有选择商品哦")
+                    weui.alert("还没有选择商品哦");
                     return;
                 }
-
-                postData = Qs.stringify({ids:postData})
-                console.log(postData);
-
-                axios.post("",postData)
-
+                this.$router.push({path: "/order/confirm", query: {cartItemId: postData}});
             }
         },
 

@@ -40,8 +40,17 @@
             },
             isTabbarActive: function (path) {
                 return this.$route.path === path;
-            }
-        }
+            },
+            rederect: function () {
+                if ("/" === this.$route.path) {
+                    this.$router.replace("/main")
+                }
+            },
+        },
+
+        created: function () {
+            this.rederect()
+        },
 
     })
 

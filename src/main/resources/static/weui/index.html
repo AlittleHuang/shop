@@ -13,7 +13,7 @@
     <script src="../common/js/qs.min.js"></script>
     <script src="../common/js/vue-router.js"></script>
     <script src="../common/js/axios.min.js"></script>
-    <script src='weui.min.js'></script>
+    <script src='js/weui.min.js'></script>
 
 </head>
 <body>
@@ -22,12 +22,9 @@
         <router-view></router-view>
     </transition>
 </div>
-<script src='index.js'></script>
+<script src='js/tool.js'></script>
+<script src='js/index.js'></script>
 <script>
-    const app = new Vue({
-        data: {},
-        router: new VueRouter({routes})
-    }).$mount('#app');
 </script>
 </body>
 </html>
