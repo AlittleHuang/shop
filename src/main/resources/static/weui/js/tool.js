@@ -50,5 +50,19 @@ var vueLoader = {
         }
     }
 };
+var __JAVA_SCRIPS_RCS_LOADED__ = [];
+
+function loadJavaScript(src, callback) {
+    if (!__JAVA_SCRIPS_RCS_LOADED__.includes(src)) {
+        var newScript = document.createElement('script');
+        newScript.setAttribute('src', src);
+        var head = document.getElementsByTagName('head')[0];
+        newScript.onload = callback;
+        head.appendChild(newScript);
+        __JAVA_SCRIPS_RCS_LOADED__.push(src)
+    }else{
+        callback()
+    }
+}
 
 //

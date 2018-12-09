@@ -43,6 +43,10 @@ html, body, #app, .bg-page {
     width: 67%;
 }
 
+.width-100 {
+    width: 100% !important;
+}
+
 .hide {
     display: none;
 }
@@ -191,12 +195,12 @@ html, body, #app, .bg-page {
     height: 45px;
 }
 
-.component-product .btn {
+.component-product .btn, .foot_but {
     line-height: 45px;
     color: white;
 }
 
-.component-product .buy {
+.component-product .buy, .foot_but {
     background: #FF0036;
     font-size: 16px;
 }
@@ -241,11 +245,20 @@ html, body, #app, .bg-page {
     text-align: center;
 }
 
+.line-height-25px {
+    line-height: 25px;
+}
+
 .buy-commit {
     position: absolute;
     left: 0;
     bottom: 24px;
     width: 100%;
+}
+
+.bottom-0 {
+    position: absolute;
+    bottom: 0;
 }
 
 .cart-footer {
@@ -270,4 +283,14 @@ html, body, #app, .bg-page {
     right: 0;
     top: 0;
     padding: 15px;
+}
+
+.confirm-btn {
+    background: red;
+    color: white;
+}
+
+.tabbar-confirm{
+    height: 45px;
+    line-height: 45px;
 }

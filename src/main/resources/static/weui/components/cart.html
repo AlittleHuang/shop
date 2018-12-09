@@ -8,7 +8,7 @@
                         <input type="checkbox" class="weui-check" v-model='store.checked' @click='selectStore(store)'>
                         <i class="weui-icon-checked"></i>
                     </label>
-                    <span>{{store.store.name}}</span>
+                    <span>{{store.name}}</span>
                 </div>
                 <div class='cart-edit'>
                     <a>编辑</a>
@@ -88,13 +88,15 @@
                     var map = {};
                     for (var i = 0; i < list.length; i++) {
                         var item = list[i];
-                        var storeId = item.item.product.id;
-                        map[storeId] = map[storeId] || {store: item.item.product.store, items: []};
+                        var storeId = item.item.product.store.id;
+                        map[storeId] = map[storeId] || item.item.product.store;
+                        map[storeId].items = map[storeId].items || [];
                         map[storeId].items.push(item);
-                        map[storeId].checked = map[storeId].store.checked || false;
+                        map[storeId].checked = map[storeId].checked || false;
                         item.checked = item.checked || false;
                     }
                     for (var key in map) this_.list.push(map[key]);
+                    console.log(this_.list)
                 })
             },
 
