@@ -32,12 +32,12 @@ public class BaseService<T, ID> {
         dao = commonDao.getEntityDao(entityType);
     }
 
-    List<T> findByIds(List<ID> ids) {
+    public List<T> findByIds(List<ID> ids) {
         String idFieldName = EntityInfo.get(entityType).getIdFieldName();
         return criteria().andIn(idFieldName, ids).getList();
     }
 
-    List<T> findByIds(ID... ids) {
+    public List<T> findByIds(ID... ids) {
         return findByIds(Arrays.asList(ids));
     }
 
@@ -77,4 +77,12 @@ public class BaseService<T, ID> {
     public void delete(T entity) {
         dao.delete(entity);
     }
+
+    @Transactional
+    public void deleteAll(Iterable<T> entities) {
+        for (T entity : entities) {
+            delete(entity);
+        }
+    }
+
 }

@@ -112,6 +112,24 @@ html, body, #app, .bg-page {
     text-align: right;
 }
 
+.absolute-right-10{
+    position: absolute;
+    right: 10px;
+}
+.absolute-right-20{
+    position: absolute;
+    right: 20px;
+}
+.absolute-left-0{
+    position: absolute;
+    left: 0;
+}
+
+.absolute-left-25{
+    position: absolute;
+    left: 25%;
+}
+
 @font-face {
     font-family: "iconfont-sm";
     src: url('//at.alicdn.com/t/font_1433401008_2229297.woff') format('woff'), /* chrome、firefox */ url('//at.alicdn.com/t/font_1433401008_2229297.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('//at.alicdn.com/t/font_1433401008_2229297.svg#iconfont') format('svg');
@@ -170,7 +188,7 @@ html, body, #app, .bg-page {
     font-size: 20px;
 }
 
-.product-content {
+.product-content, .subbar-1 {
     overflow: scroll;
     height: calc(100vh - 45px);
 }
@@ -261,11 +279,16 @@ html, body, #app, .bg-page {
     bottom: 0;
 }
 
+.cart-item-list {
+    overflow: scroll;
+    height: calc(100vh - 95px);
+}
+
 .cart-footer {
     width: 100%;
     background: white;
     height: 45px;
-    position: absolute;
+    /*position: fixed;*/
     bottom: 50px;
     line-height: 40px;
 }
@@ -294,3 +317,37 @@ html, body, #app, .bg-page {
     height: 45px;
     line-height: 45px;
 }
+
+.nav-lt {
+    padding-right: 13px;
+    position: relative;
+}
+
+.nav-lt:after {
+    content: " ";
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+    border-width: 2px 2px 0 0;
+    border-color: #C8C8CD;
+    border-style: solid;
+    -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+    transform: matrix(-1, 1.1, 1, 1.1, 0, 0);
+    position: relative;
+    top: -2px;
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.navbar {
+    display: -webkit-box;
+    display: -webkit-flex;
+    z-index: 500;
+    width: 100%;
+    background-color: #fafafa;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+}
+
+

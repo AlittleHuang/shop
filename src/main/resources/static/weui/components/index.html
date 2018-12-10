@@ -1,7 +1,7 @@
 <template>
-    <div class="weui-tab component-page">
+    <div class="weui-tab">
         <div class="weui-tab__panel">
-            <transition name='fade'>
+            <transition :name='transitionName'>
                 <router-view></router-view>
             </transition>
         </div>
@@ -32,6 +32,7 @@
 
         data: function () {
             return {
+                transitionName: "",
                 tabbar_active_index: this.$router.path
             }
         },
@@ -53,6 +54,17 @@
         created: function () {
             this.rederect()
         },
+
+        watch: {
+            '$route': function (to, from) {
+                var index = {"/main": 0, "/cart": 1};
+                this.transitionName = "";
+                // const toDepth = to.path.split('/').length;
+                // const fromDepth = from.path.split('/').length;
+                console.log(index[to.path] < index[from.path]);
+                this.transitionName = index[to.path] < index[from.path] ? 'slide-right' : 'slide-left'
+            }
+        }
 
     })
 

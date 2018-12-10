@@ -1,69 +1,78 @@
 <template>
     <div class='component-cart'>
         <!-- 列表 -->
-        <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
-            <div class="weui-panel__hd">
-                <div class="weui-cell__hd position-relative">
-                    <label>
-                        <input type="checkbox" class="weui-check" v-model='store.checked' @click='selectStore(store)'>
-                        <i class="weui-icon-checked"></i>
-                    </label>
-                    <span>{{store.name}}</span>
-                </div>
-                <div class='cart-edit'>
-                    <a>编辑</a>
-                </div>
-            </div>
-            <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_appmsg" v-for='item in store.items'>
-                    <label>
-                        <div class="weui-cell__hd">
-                            <input type="checkbox" class="weui-check" @click='selectItem(item,store)'
-                                    v-model='item.checked'>
-                            <i class="weui-icon-checked"></i>
+        <template v-if="list.length>0">
+            <div class='cart-item-list'>
+                <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
+                    <div class="weui-panel__hd">
+                        <div class="weui-cell__hd position-relative">
+                            <label>
+                                <input type="checkbox" class="weui-check" v-model='store.checked'
+                                        @click='selectStore(store)'>
+                                <i class="weui-icon-checked"></i>
+                            </label>
+                            <span>{{store.name}}</span>
                         </div>
-                    </label>
-                    <router-link :to='("/product/" + item.item.product.id)'>
-                        <div class="weui-media-box__hd">
-                            <img class="weui-media-box__thumb" :src="item.item.product.coverImage" alt="">
+                        <div class='cart-edit'>
+                            <a>编辑</a>
                         </div>
-                    </router-link>
-                    <div class="weui-media-box__bd">
-                        <p class="weui-media-box__desc">{{item.item.product.name}}</p>
-                        <div class="weui-media-box__desc" style="margin-top: 8px;">
-                            <span class="real-price" style="line-height: 24px;">￥{{item.item.price | toFixed2}}</span>
-                            <span class="clearfix float-right">
+                    </div>
+                    <div class="weui-panel__bd">
+                        <div class="weui-media-box weui-media-box_appmsg" v-for='item in store.items'>
+                            <label>
+                                <div class="weui-cell__hd">
+                                    <input type="checkbox" class="weui-check" @click='selectItem(item,store)'
+                                            v-model='item.checked'>
+                                    <i class="weui-icon-checked"></i>
+                                </div>
+                            </label>
+                            <router-link :to='("/product/" + item.item.product.id)'>
+                                <div class="weui-media-box__hd">
+                                    <img class="weui-media-box__thumb" :src="item.item.product.coverImage" alt="">
+                                </div>
+                            </router-link>
+                            <div class="weui-media-box__bd">
+                                <p class="weui-media-box__desc">{{item.item.product.name}}</p>
+                                <div class="weui-media-box__desc" style="margin-top: 8px;">
+                                    <span class="real-price"
+                                            style="line-height: 24px;">￥{{item.item.price | toFixed2}}</span>
+                                    <span class="clearfix float-right">
                                 <a class="buy-count-controller" @click='changeCount(item,-1)'>-</a>
                                 <input class="buy-count-controller" v-model='item.count' @change='changeCount(item)'>
                                 <a class="buy-count-controller" @click='changeCount(item,1)'>+</a>
                             </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 底部结算 -->
+            <!-- 底部结算 -->
 
-        <div class='cart-footer clearfix'>
-            <div class="weui-cells_checkbox float-left width-33">
-                <label>
-                    <input type="checkbox" class="weui-check" v-model='allChecked' @click='checkAll'>
-                    <i class="weui-icon-checked"></i>
-                    <span>全选</span>
-                </label>
+            <div class='cart-footer'>
+                <div class="weui-cells_checkbox float-left width-33">
+                    <label>
+                        <input type="checkbox" class="weui-check" v-model='allChecked' @click='checkAll'>
+                        <i class="weui-icon-checked"></i>
+                        <span>全选</span>
+                    </label>
+                </div>
+                <div class="float-left width-67">
+                    <label class='text-align-center float-right settlement-button'
+                            @click='settlement'>
+                        结算
+                    </label>
+                    <label class='float-right' style='margin-right: 10px'>
+                        <span>合计</span><span class='real-price'>￥{{totalFee | toFixed2}}</span>
+                    </label>
+                </div>
             </div>
-            <div class="float-left width-67">
-                <label class='text-align-center float-right settlement-button'
-                        @click='settlement'>
-                    结算
-                </label>
-                <label class='float-right' style='margin-right: 10px'>
-                    <span>合计</span><span class='real-price'>￥{{totalFee | toFixed2}}</span>
-                </label>
-            </div>
-        </div>
 
+        </template>
+        <template v-else>
+            购物车里啥也没有，去逛逛吧
+        </template>
     </div>
 </template>
 
@@ -96,7 +105,6 @@
                         item.checked = item.checked || false;
                     }
                     for (var key in map) this_.list.push(map[key]);
-                    console.log(this_.list)
                 })
             },
 
@@ -205,7 +213,7 @@
         },
 
         beforeRouteUpdate: function () {
-            this.loadData();
+            this.$nextTick(this.loadData());
         },
 
         created: function () {

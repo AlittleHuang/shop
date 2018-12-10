@@ -33,7 +33,7 @@
 }
 .fade-enter-active{
     will-change: transform;
-    transition:opacity .5s;
+    transition:all .5s;
 }
 .fade-leave-active{
     will-change: transform;

@@ -6,7 +6,10 @@ import com.shengchuang.common.mvc.view.JsonMap;
 import com.shengchuang.common.util.Assert;
 import com.shengchuang.shop.domain.CartItem;
 import com.shengchuang.shop.domain.Product;
-import com.shengchuang.shop.domain.ProductItem;
+import com.shengchuang.shop.service.CartService;
+import com.shengchuang.shop.service.ProductItemService;
+import com.shengchuang.shop.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +20,10 @@ import java.util.List;
 @RestController
 public class CartController extends AbstractController {
 
-    private Criteria<ProductItem> getProductItemCriteria() {
-        return commonDao.createCriteria(ProductItem.class);
-    }
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private ProductItemService productItemService;
 
     private Criteria<CartItem> getCartItemCriteria() {
         return commonDao.createCriteria(CartItem.class);
@@ -36,13 +40,13 @@ public class CartController extends AbstractController {
     public View addToCart(Integer id, Integer count) {
         Assert.notNull(id, "id错误");
         Assert.state(count != null && count > 0, "count error");
-        boolean exists = getProductItemCriteria()
+        boolean exists = productItemService.criteria()
                 .andEqual("id", id)
                 .andEqual("product.status", Product.STATUS_ONLINE)
                 .exists();
         Assert.state(exists, "商品不存在");
 
-        int userId = 1;//TODO login user id
+        int userId = getLoginUserId();
 
         CartItem item = getCartItemCriteria()
                 .andEqual("userId", userId)
@@ -66,9 +70,15 @@ public class CartController extends AbstractController {
      * @return
      */
     @RequestMapping("/buyer/cart/list")
-    public View list() {
+    public View list(Integer[] ids) {
         Integer userId = 1;//TODO login user id
-        List<CartItem> list = getCartItemCriteria().andEqual("userId", userId).getList();
+        Criteria<CartItem> criteria = getCartItemCriteria();
+        if (ids != null) {
+            criteria.andIn("id", ids);
+        }
+        List<CartItem> list = criteria
+                .andEqual("userId", userId)
+                .getList();
         return new JsonMap().add("list", list);
     }
 
@@ -83,7 +93,7 @@ public class CartController extends AbstractController {
     public View updateCount(Integer cartId, Integer count) {
         Assert.state(count != null && count > 0, "count error");
 
-        Integer userId = 1;// TODO login user id
+        Integer userId = getLoginUserId();
 
         CartItem cartItem = commonDao.createCriteria(CartItem.class)
                 .andEqual("userId", userId)

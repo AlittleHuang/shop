@@ -1,0 +1,29 @@
+<template>
+
+    <div class='component-address'>
+        <div class='bar-header navbar'>
+            <div class='nav-lt'></div>
+            <div @click="$router.go(-1)" style='width: 50px'>返回</div>
+            <div class='absolute-left-25 width-50 text-center'>我的地址</div>
+            <div @click="" class='weui-flex__item absolute-right-20'>添加</div>
+        </div>
+        <div class="subbar-1 overflow-scroll">
+            <div class="weui-panel__bd">
+                <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
+                    <div @click='$router.push("/address")'>
+                        <p class="weui-media-box__desc weui-flex " style='padding-bottom: 5px'>
+                            <span class='weui-flex__item'>张三丰</span>
+                            <span>18877778888</span>
+                        </p>
+                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+</script>
+

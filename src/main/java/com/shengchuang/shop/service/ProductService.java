@@ -1,4 +1,4 @@
-package com.shengchuang.shop.web.service;
+package com.shengchuang.shop.service;
 
 import com.shengchuang.base.BaseService;
 import com.shengchuang.shop.domain.Product;

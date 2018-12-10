@@ -24,7 +24,7 @@ function rmCircularReference(json) {
     }
 }
 
-var vueLoader = {
+var componentLoader = {
     load: function (url) {
         return function (resolve) {
             axios.get(url).then(function (resp) {
@@ -34,18 +34,17 @@ var vueLoader = {
 
                 var component = {};
 
-
                 function exports(data) {
                     component = data;
                 }
 
                 var scripts = dom.querySelectorAll("script");
                 for (var i = 0; i < scripts.length; i++) {
-                    eval(scripts[i].innerHTML)
+                    eval(scripts[i].innerHTML);
                 }
 
                 component.template = dom.querySelector("template").innerHTML;
-                return resolve(component);
+                setTimeout(resolve(component),100);
             });
         }
     }
@@ -64,5 +63,3 @@ function loadJavaScript(src, callback) {
         callback()
     }
 }
-
-//

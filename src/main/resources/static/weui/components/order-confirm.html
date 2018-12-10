@@ -1,68 +1,73 @@
 <!-- 确认订单 -->
 <template>
     <div class="component-order-confirm position-relative heigth-100">
-        <div class="weui-panel weui-panel_access">
-            <div class="weui-panel__bd">
-                <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
-                    <div>
-                        <p class="weui-media-box__desc weui-flex " style='padding-bottom: 5px'>
-                            <span class='weui-flex__item'>张三丰</span>
-                            <span>18877778888</span>
-                        </p>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+        <div class='position-relative subbar-1'>
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-panel__bd">
+                    <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
+                        <div @click='$router.push("/address")'>
+                            <p class="weui-media-box__desc weui-flex " style='padding-bottom: 5px'>
+                                <span class='weui-flex__item'>张三丰</span>
+                                <span>18877778888</span>
+                            </p>
+                            <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                        </div>
+                        <span class="weui-cell__ft"></span>
                     </div>
-                    <span class="weui-cell__ft"></span>
                 </div>
             </div>
-        </div>
 
-        <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
-            <div class="weui-panel__hd">
-                <div class="weui-cell__hd position-relative">
-                    <span>{{store.name}}</span>
-                </div>
-            </div>
-            <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_appmsg" v-for='item in store.items'>
-                    <div class="weui-media-box__hd">
-                        <img class="weui-media-box__thumb" :src="item.item.product.coverImage" alt="">
+            <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
+                <div class="weui-panel__hd">
+                    <div class="weui-cell__hd position-relative">
+                        <span>{{store.name}}</span>
                     </div>
-                    <div class="weui-media-box__bd">
-                        <p class="weui-media-box__desc">{{item.item.product.name}}</p>
-                        <div class="weui-media-box__desc" style="margin-top: 8px;">
-                            <span class="real-price" style="line-height: 24px;">￥{{item.item.price | toFixed2}}</span>
-                            <span class="clearfix float-right">
+                </div>
+                <div class="weui-panel__bd">
+                    <div class="weui-media-box weui-media-box_appmsg" v-for='item in store.items'>
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" :src="item.item.product.coverImage" alt="">
+                        </div>
+                        <div class="weui-media-box__bd">
+                            <p class="weui-media-box__desc">{{item.item.product.name}}</p>
+                            <div class="weui-media-box__desc" style="margin-top: 8px;">
+                                    <span class="real-price"
+                                            style="line-height: 24px;">￥{{item.item.price | toFixed2}}</span>
+                                <span class="clearfix float-right">
                                 <template v-if="cartItemId">
                                    <span class="line-height-25px">x{{item.count}}</span>
                                 </template>
                                 <template v-else>
                                     <a class="buy-count-controller" @click='item.count>1&&item.count--'>-</a>
                                     <input class="buy-count-controller" v-model='item.count'
-                                           @change='changeCount(item)'>
+                                            @change='changeCount(item)'>
                                     <a class="buy-count-controller" @click='item.count++'>+</a>
                                 </template>
                             </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="weui-panel__ft">
-                    <a class="weui-cell weui-cell_link" style="color: #0D0D0D;">
-                        <div class="weui-cell__bd text-rigth weui-media-box__desc">
-                            <span>共{{store.totalCount}}件商品  小计:</span>
-                            <span class="real-price">￥{{store.totalFee}}</span>
-                        </div>
-                    </a>
+                    <div class="weui-panel__ft">
+                        <a class="weui-cell weui-cell_link" style="color: #0D0D0D;">
+                            <div class="weui-cell__bd text-rigth weui-media-box__desc">
+                                <span>共{{store.totalCount}}件商品  小计:</span>
+                                <span class="real-price">￥{{store.totalFee}}</span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+
         <div class="weui-flex weui-tabbar tabbar-confirm">
             <div class="weui-flex__item text-rigth" style="padding-right: 10px">
                 <span>合计金额:</span><span class="real-price">￥{{totalFee}}</span>
             </div>
             <div class="text-center" style="width: 100px">
-                <div class="confirm-btn">提交订单</div>
+                <div class="confirm-btn" @click='confirmOrders'>提交订单</div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -70,6 +75,7 @@
     exports({
         data: function () {
             return {
+                inAddressPage: null,
                 cartItemId: this.$route.query.cartItemId,
                 list: [],
                 totalFee: 0,
@@ -78,25 +84,41 @@
         },
         methods: {
             init: function () {
-                if (this.cartItemId) {
+                this.list = [];
+                if (this.cartItemId) {//从购物车来
                     var this_ = this;
-                    axios.get("/buyer/cart/list").then(function (resp) {
-                        var list = resp.data.list;
-                        var map = {};
-                        for (var i = 0; i < list.length; i++) {
-                            var item = list[i];
-                            var storeId = item.item.product.store.id;
-                            map[storeId] = map[storeId] || item.item.product.store;
-                            map[storeId].items = map[storeId].items || [];
-                            map[storeId].items.push(item);
-                        }
-                        for (var key in map) this_.list.push(map[key]);
-                        console.log(this_.list)
-                    })
-                } else {
+                    axios.get("/buyer/cart/list?" + Qs.stringify({ids: this.cartItemId}, {arrayFormat: 'repeat'}))
+                        .then(function (resp) {
+                            var list = resp.data.list;
+                            var map = {};
+                            for (var i = 0; i < list.length; i++) {
+                                var item = list[i];
+                                var storeId = item.item.product.store.id;
+                                map[storeId] = map[storeId] || item.item.product.store;
+                                map[storeId].items = map[storeId].items || [];
+                                map[storeId].items.push(item);
+                            }
+                            for (var key in map) this_.list.push(map[key]);
+                        })
+                } else {//立即购买
 
                 }
             },
+            confirmOrders: function () {
+                if (this.cartItemId) {
+                    let url = "/buyer/order/add/from/cart";
+                    let data = Qs.stringify({
+                        cartItemIds: this.cartItemId,
+                        addrId: this.addrId
+                    }, {arrayFormat: 'repeat'});
+                    axios.post(url, data).then(function (resp) {
+                        console.log(resp)
+                    })
+                } else {
+                    // TODO
+                }
+            }
+            // 收货地址
         },
 
         watch: {

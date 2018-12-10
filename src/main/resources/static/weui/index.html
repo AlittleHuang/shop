@@ -23,8 +23,12 @@
     </transition>
 </div>
 <script src='js/tool.js'></script>
-<script src='js/index.js'></script>
+<script src='js/config.js'></script>
+<script src='js/router.js'></script>
 <script>
+    const app = new Vue({
+        router: router
+    }).$mount('#app');
 </script>
 </body>
 </html>

@@ -44,7 +44,6 @@ import com.shengchuang.member.core.shiro.PasswordUtil;
 import com.shengchuang.member.core.shiro.UserRealm;
 
 @RequestMapping({"", "app"})
-//@CrossOrigin(origins = {"http://192.168.1.67:8006", "http://localhost:8006"})
 public abstract class AbstractController implements StreamUtil {
 
     private static final String SESSION_NAME_USER = UserRealm.SESSION_NAME_USER;
@@ -121,8 +120,6 @@ public abstract class AbstractController implements StreamUtil {
      * @return
      */
     protected HttpServletRequest request() {
-        /*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        Assert.notNull(attributes, "");*/
         return request.get();
     }
 
@@ -132,9 +129,12 @@ public abstract class AbstractController implements StreamUtil {
      * @return
      */
     protected HttpServletResponse response() {
-//        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//        Assert.notNull(attributes, "");
         return response.get();
+    }
+
+    protected Integer getLoginUserId(){
+        // TODO get login user id
+        return 1;
     }
 
     /**

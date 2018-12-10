@@ -1,5 +1,6 @@
 package com.shengchuang.shop.domain;
 
+import com.shengchuang.common.util.Assert;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -32,7 +33,8 @@ public class OrderItem {
     @JoinColumn(name = "order_item_id")
     private ProductItem item;
 
-    public OrderItem(ProductItem item, Integer count) {
+    public OrderItem(ProductItem item, int count) {
+        Assert.state(count > 0, "购买数量必须大于0");
         this.count = count;
         this.item = item;
     }
