@@ -63,3 +63,23 @@ function loadJavaScript(src, callback) {
         callback()
     }
 }
+
+var ___map_js_source___ = {};
+function execute(src,callback) {
+    let code = ___map_js_source___[src];
+    if(!code){
+        axios.get(src).then(function (resp) {
+            if(resp.data) {
+                eval(resp.data);
+                callback();
+            }
+        })
+    }else{
+        eval(code);
+        callback();
+    }
+}
+
+function limitNum(num, lo, hi) {
+    return Math.max(lo, Math.min(hi, num))
+}

@@ -155,7 +155,7 @@
 
                     axios.post("/buyer/cart/add", Qs.stringify(item)).then(function (resp) {
                         if (resp.data.success) {
-                            weui.toast("成功加入购物车");
+                            weui.toast("成功加入购物车", 1500);
                         } else {
                             weui.alert(resp.data.message);
                         }
