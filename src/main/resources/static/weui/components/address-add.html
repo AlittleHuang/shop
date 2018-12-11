@@ -1,0 +1,82 @@
+<template>
+
+    <div class='component-address'>
+        <div class='bar-header navbar'>
+            <div class='nav-lt'></div>
+            <div @click="$router.go(-1)" style='width: 50px'>返回</div>
+            <div class='absolute-left-25 width-50 text-center'>我的地址</div>
+        </div>
+        <div class="subbar-1 overflow-scroll">
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">qq</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入qq号">
+                    </div>
+                </div>
+                <div class="weui-cell weui-cell_vcode">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">手机号</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="tel" placeholder="请输入手机号">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <button class="weui-vcode-btn">获取验证码</button>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">日期</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="date" value="">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">所在地区</label></div>
+                    <div class="weui-cell__bd" @click='select'>
+                        <input id="cascadePickerBtn" class="weui-input" disabled v-model='name'/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+    exports({
+        data: function () {
+            return {
+                name: ""
+            }
+        },
+        methods: {
+            select: function () {
+                var this_ = this;
+                axios.get("/buyer/pca").then(function (resp) {
+                    var data = resp.request.responseText.replaceAll("code", "value")
+                        .replaceAll("name", "label");
+                    data = JSON.parse(data)
+                    var config = {
+                        depth: 3,
+                        defaultValue: [11, 1101, 110101],
+
+                        onConfirm: function onConfirm(result) {
+                            this_.name = "";
+                            for (var i = 0; i < result.length; i++) {
+                                this_.name += result[i].label + " "
+                            }
+                            console.log(result)
+                        },
+
+                        id: 'cascadePicker'
+                    };
+                    weui.picker(data, config);
+                })
+
+            }
+        }
+    })
+
+</script>
+

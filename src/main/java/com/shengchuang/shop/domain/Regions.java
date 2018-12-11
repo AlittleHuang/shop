@@ -29,4 +29,10 @@ public class Regions {
     //收货地址
 
 
+    public Regions(Integer id, String name, Integer pid, Integer type) {
+        this.id = id;
+        this.name = name;
+        this.pid = pid;
+        this.type = type;
+    }
 }

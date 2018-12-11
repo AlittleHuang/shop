@@ -80,6 +80,11 @@ function execute(src,callback) {
     }
 }
 
-function limitNum(num, lo, hi) {
-    return Math.max(lo, Math.min(hi, num))
+function limitNum(num, min, max) {
+    return Math.max(min, Math.min(max, num))
+}
+
+String.prototype.replaceAll = function (FindText, RepText) {
+    var regExp = new RegExp(FindText, "g");
+    return this.replace(regExp, RepText);
 }

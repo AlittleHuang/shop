@@ -1,48 +1,61 @@
 package com.shengchuang.shop.service;
 
-import com.shengchuang.common.mvc.repository.CommonDao;
-import com.shengchuang.shop.domain.Regions;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class RegionsService {
 
-    private Map<Integer, Regions> regionsMap;
-    private CommonDao commonDao;
+    @Getter
+    @Setter
+    public static class Node {
+        int id;
+        String name;
+        Integer pid;
 
-    @Autowired
-    private void initRegionsMap(CommonDao commonDao) {
-        this.commonDao = commonDao;
-        reload();
-    }
-
-    public void reload() {
-        List<Regions> type = commonDao.createCriteria(Regions.class).getList();
-        regionsMap = type.stream().collect(Collectors.toMap(Regions::getId, Function.identity()));
-    }
-
-    public String areaToString(Integer areaId) {
-        Assert.state(isAreaId(areaId), "参数错误");
-        Regions regions = regionsMap.get(areaId);
-        StringBuilder name = new StringBuilder(regions.getName());
-        Integer pId = regions.getPid();
-        while (pId != null) {
-            Regions r = regionsMap.get(pId);
-            name.insert(0, r.getName() + "，");
-            pId = r.getPid();
+        public Node(int id, String name, Integer pid) {
+            this.id = id;
+            this.name = name;
+            this.pid = pid;
         }
-        return name.toString();
     }
 
-    public boolean isAreaId(Integer areaId) {
-        Regions regions = regionsMap.get(areaId);
-        return regions != null && regions.getType() == 2;
+    @Getter
+    private String data;
+    private Map<Integer, Node> dataMap = new HashMap<>();
+
+    private void setNode(JSONObject node, Integer pid) {
+        int code = node.getIntValue("code");
+        dataMap.put(code, new Node(code, node.getString("name"), pid));
+        JSONArray children = node.getJSONArray("children");
+        if (children != null && !children.isEmpty()) {
+            for (int i = 0; i < children.size(); i++) {
+                setNode(children.getJSONObject(i), code);
+            }
+        }
     }
+
+    {
+        try (InputStream inputStream = new ClassPathResource("data/pca-code.json").getInputStream()) {
+            data = IOUtils.toString(inputStream, "utf-8");
+            JSONArray array = JSON.parseArray(data);
+            for (int i = 0; i < array.size(); i++) {
+                setNode(array.getJSONObject(i), null);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
