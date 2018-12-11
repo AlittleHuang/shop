@@ -1,3 +1,7 @@
+.weui-cells {
+    font-size: 14px;
+}
+
 html, body, #app, .bg-page {
     height: 100%;
     width: 100%;
@@ -193,6 +197,11 @@ html, body, #app, .bg-page {
     height: calc(100vh - 45px);
 }
 
+.subbar-2 {
+    overflow: scroll;
+    height: calc(100vh - 90px);
+}
+
 .product-content img {
     width: auto;
     height: auto;
@@ -284,6 +293,7 @@ html, body, #app, .bg-page {
     height: calc(100vh - 95px);
 }
 
+
 .cart-footer {
     width: 100%;
     background: white;
@@ -348,6 +358,12 @@ html, body, #app, .bg-page {
     background-color: #fafafa;
     border-bottom: 1px solid #ccc;
     padding: 10px 20px;
+}
+
+.def-btn {
+    color: white;
+    background: red;
+    text-align: center;
 }
 
 

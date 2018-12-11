@@ -6,9 +6,8 @@
                 <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
                     <div class="weui-panel__hd">
                         <div class="weui-cell__hd position-relative">
-                            <label>
-                                <input type="checkbox" class="weui-check" v-model='store.checked'
-                                        @click='selectStore(store)'>
+                            <label @click.prevent='selectStore(store)'>
+                                <input type="checkbox" class="weui-check" v-model='store.checked'>
                                 <i class="weui-icon-checked"></i>
                             </label>
                             <span>{{store.name}}</span>
@@ -19,10 +18,9 @@
                     </div>
                     <div class="weui-panel__bd">
                         <div class="weui-media-box weui-media-box_appmsg" v-for='item in store.items'>
-                            <label>
+                            <label @click.prevent='selectItem(item,store)'>
                                 <div class="weui-cell__hd">
-                                    <input type="checkbox" class="weui-check" @click='selectItem(item,store)'
-                                            v-model='item.checked'>
+                                    <input type="checkbox" class="weui-check" v-model='item.checked'>
                                     <i class="weui-icon-checked"></i>
                                 </div>
                             </label>
@@ -52,15 +50,15 @@
 
             <div class='cart-footer'>
                 <div class="weui-cells_checkbox float-left width-33">
-                    <label>
-                        <input type="checkbox" class="weui-check" v-model='allChecked' @click='checkAll'>
+                    <label @click.prevent='checkAll'>
+                        <input type="checkbox" class="weui-check" v-model='allChecked'>
                         <i class="weui-icon-checked"></i>
                         <span>全选</span>
                     </label>
                 </div>
                 <div class="float-left width-67">
                     <label class='text-align-center float-right settlement-button'
-                            @click='settlement'>
+                            @click.prevent='settlement'>
                         结算
                     </label>
                     <label class='float-right' style='margin-right: 10px'>
@@ -149,6 +147,7 @@
             ,
 
             selectStore: function (store) {
+                console.log(store)
                 store.checked = !store.checked;
                 for (let i in store.items) {
                     store.items[i].checked = store.checked;

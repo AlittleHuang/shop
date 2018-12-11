@@ -8,14 +8,14 @@
             <div @click="$router.push('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>
         </div>
         <div class="subbar-1 overflow-scroll">
-            <div class="weui-panel__bd">
+            <div class="weui-panel__bd" v-for='item in list'>
                 <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
-                    <div @click='$router.push("/address")'>
+                    <div class='width-100' @click='checkAddress(item)'>
                         <p class="weui-media-box__desc weui-flex " style='padding-bottom: 5px'>
-                            <span class='weui-flex__item'>张三丰</span>
-                            <span>18877778888</span>
+                            <span class='weui-flex__item'>{{item.receiver}}</span>
+                            <span>{{item.phone}}</span>
                         </p>
-                        <p class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+                        <p class="weui-media-box__desc">{{item.address}}</p>
                     </div>
                 </div>
             </div>
@@ -24,6 +24,37 @@
 </template>
 
 <script>
+    exports({
+        data: function () {
+            return {
+                pca: undefined,
+                list: []
+            }
+        },
 
+        methods: {
+            init: function () {
+                var this_ = this;
+                axios.get("/byuer/shipping-address/list").then(function (resp) {
+                    var list = this_.list = resp.data.list;
+                    axios.get("/buyer/pca.json").then(function (resp) {
+                        var pca = getPca(resp);
+                        for (var i in list) {
+                            list[i].address = pca.toString(list[i].regionsId) + list[i].address
+                        }
+                    })
+                });
+            },
+            checkAddress: function (address) {
+                let query = this.$route.query;
+                query.addressId = address.id
+                this.$router.push({path: "/order/confirm", query: query});
+            }
+        },
+
+        created: function () {
+            this.$nextTick(this.init());
+        }
+    })
 </script>
 

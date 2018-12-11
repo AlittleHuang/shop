@@ -44,7 +44,7 @@ var componentLoader = {
                 }
 
                 component.template = dom.querySelector("template").innerHTML;
-                setTimeout(resolve(component),100);
+                setTimeout(resolve(component), 100);
             });
         }
     }
@@ -59,22 +59,23 @@ function loadJavaScript(src, callback) {
         newScript.onload = callback;
         head.appendChild(newScript);
         __JAVA_SCRIPS_RCS_LOADED__.push(src)
-    }else{
+    } else {
         callback()
     }
 }
 
 var ___map_js_source___ = {};
-function execute(src,callback) {
+
+function execute(src, callback) {
     let code = ___map_js_source___[src];
-    if(!code){
+    if (!code) {
         axios.get(src).then(function (resp) {
-            if(resp.data) {
+            if (resp.data) {
                 eval(resp.data);
                 callback();
             }
         })
-    }else{
+    } else {
         eval(code);
         callback();
     }
@@ -87,4 +88,69 @@ function limitNum(num, min, max) {
 String.prototype.replaceAll = function (FindText, RepText) {
     var regExp = new RegExp(FindText, "g");
     return this.replace(regExp, RepText);
+};
+
+String.prototype.toJSON = function () {
+    return JSON.parse(this);
+};
+
+var provinceCitArea;
+
+function getPca(resp) {
+    provinceCitArea = provinceCitArea || new ProvinceCitArea(resp);
+    return provinceCitArea;
+}
+
+function ProvinceCitArea(resp) {
+    var pca = resp.data;
+    var weuiPicker = resp.request.responseText
+        .replaceAll("code", "value")
+        .replaceAll("name", "label")
+        .toJSON();
+    var pcaMaps;
+
+
+    function addToMap(node) {
+        pcaMaps[node.code] = node;
+        let children = node.children;
+        for (let i in children) {
+            addToMap(children[i])
+        }
+    }
+
+    function pcaMap() {
+        if (pcaMaps) {
+            return pcaMaps;
+        }
+        pcaMaps = {};
+        for (var i in pca) {
+            addToMap(pca[i]);
+        }
+        return pcaMaps;
+    }
+
+
+    this.areaIdToArr = function (areaId) {
+        if (areaId) {
+            return [
+                (areaId - areaId % 10000) / 10000,
+                (areaId - areaId % 100) / 100,
+                areaId
+            ];
+        }
+        return [11, 1101, 110101]
+    };
+
+    this.toWeuiPicker = function () {
+        weuiPicker = weuiPicker || resp.request.responseText
+            .replaceAll("code", "value")
+            .replaceAll("name", "label")
+            .toJSON();
+        return weuiPicker
+    };
+
+    this.toString = function (areaId) {
+        let pcaIds = this.areaIdToArr(areaId);
+        return pcaMap()[pcaIds[0]].name + pcaMap()[pcaIds[1]].name + pcaMap()[areaId].name
+    }
 }
