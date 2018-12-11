@@ -1,5 +1,5 @@
 <template>
-    <div class='component-cart'>
+    <div class='component-cart width-full'>
         <!-- 列表 -->
         <template v-if="list.length>0">
             <div class='cart-item-list'>
@@ -68,7 +68,7 @@
             </div>
 
         </template>
-        <template v-else>
+        <template v-else-if="dataLoaded">
             购物车里啥也没有，去逛逛吧
         </template>
     </div>
@@ -76,9 +76,11 @@
 
 <script>
 
+
     exports({
         data: function () {
             return {
+                dataLoaded: false,//完成
                 allChecked: false,
                 totalFee: 0,
                 list: []
@@ -88,21 +90,25 @@
         computed: {},
 
         methods: {
+            init: function (data) {
+                var list = data.list;
+                var map = {};
+                for (var i = 0; i < list.length; i++) {
+                    var item = list[i];
+                    var storeId = item.item.product.store.id;
+                    map[storeId] = map[storeId] || item.item.product.store;
+                    map[storeId].items = map[storeId].items || [];
+                    map[storeId].items.push(item);
+                    map[storeId].checked = map[storeId].checked || false;
+                    item.checked = item.checked || false;
+                }
+                for (var key in map) this.list.push(map[key]);
+            },
             loadData: function () {
                 var this_ = this;
                 axios.get("/buyer/cart/list").then(function (resp) {
-                    var list = resp.data.list;
-                    var map = {};
-                    for (var i = 0; i < list.length; i++) {
-                        var item = list[i];
-                        var storeId = item.item.product.store.id;
-                        map[storeId] = map[storeId] || item.item.product.store;
-                        map[storeId].items = map[storeId].items || [];
-                        map[storeId].items.push(item);
-                        map[storeId].checked = map[storeId].checked || false;
-                        item.checked = item.checked || false;
-                    }
-                    for (var key in map) this_.list.push(map[key]);
+                    let data = resp.data;
+                    init(data, this_);
                 })
             },
 
@@ -147,7 +153,7 @@
             ,
 
             selectStore: function (store) {
-                console.log(store)
+                console.log(store);
                 store.checked = !store.checked;
                 for (let i in store.items) {
                     store.items[i].checked = store.checked;
@@ -211,13 +217,16 @@
             }
         },
 
-        beforeRouteUpdate: function () {
-            this.$nextTick(this.loadData());
+        beforeRouteEnter: function (to, from, next) {
+            next(function (this_) {
+                axios.get("/buyer/cart/list").then(function (resp) {
+                    this_.dataLoaded = true;
+                    let data = resp.data;
+                    this_.init(data);
+                })
+            })
         },
 
-        created: function () {
-            this.$nextTick(this.loadData());
-        }
     });
 
 </script>

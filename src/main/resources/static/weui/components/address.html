@@ -1,13 +1,12 @@
 <template>
-
-    <div class='component-address'>
+    <div class='component-address width-full'>
         <div class='bar-header navbar'>
             <div class='nav-lt'></div>
             <div @click="$router.go(-1)" style='width: 50px'>返回</div>
             <div class='absolute-left-25 width-50 text-center'>我的地址</div>
             <div @click="$router.push('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>
         </div>
-        <div class="subbar-1 overflow-scroll">
+        <div class="subbar-1 overflow-y-scroll">
             <div class="weui-panel__bd" v-for='item in list'>
                 <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
                     <div class='width-100' @click='checkAddress(item)'>
@@ -15,7 +14,7 @@
                             <span class='weui-flex__item'>{{item.receiver}}</span>
                             <span>{{item.phone}}</span>
                         </p>
-                        <p class="weui-media-box__desc">{{item.address}}</p>
+                        <p class="weui-media-box__desc">{{item.fullAddress + item.address}}</p>
                     </div>
                 </div>
             </div>
@@ -27,7 +26,6 @@
     exports({
         data: function () {
             return {
-                pca: undefined,
                 list: []
             }
         },
@@ -37,17 +35,11 @@
                 var this_ = this;
                 axios.get("/byuer/shipping-address/list").then(function (resp) {
                     var list = this_.list = resp.data.list;
-                    axios.get("/buyer/pca.json").then(function (resp) {
-                        var pca = getPca(resp);
-                        for (var i in list) {
-                            list[i].address = pca.toString(list[i].regionsId) + list[i].address
-                        }
-                    })
                 });
             },
             checkAddress: function (address) {
                 let query = this.$route.query;
-                query.addressId = address.id
+                query.addressId = address.id;
                 this.$router.push({path: "/order/confirm", query: query});
             }
         },

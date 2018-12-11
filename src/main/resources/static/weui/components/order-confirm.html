@@ -1,6 +1,6 @@
 <!-- 确认订单 -->
 <template>
-    <div class="component-order-confirm position-relative heigth-100">
+    <div class="component-order-confirm position-relative height-100">
         <div class='position-relative subbar-1'>
             <div class="weui-panel weui-panel_access">
                 <div class="weui-panel__bd">
@@ -88,13 +88,13 @@
                 this.list = [];
                 var this_ = this;
                 axios.get("/byuer/shipping-address/" + (this.$route.query.addressId || "")).then(function (resp) {
+                    console.log("666");
                     if (resp.data.success) {
                         var address = resp.data.data
                         address.fullAddress = resp.data.fullAddress
                         this_.address = address;
                     } else {
-                        var query = this.$route.query;
-                        this.$router.replace({path: "/address", query: query});
+                        this_.$router.push("/address/add");
                     }
                 });
                 if (this.cartItemId) {//从购物车来

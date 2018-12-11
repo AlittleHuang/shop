@@ -1,11 +1,11 @@
 package com.shengchuang.shop.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.shengchuang.shop.service.RegionsService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * 收货地址
@@ -59,11 +59,14 @@ public class ShippingAddress {
     private Long sortNum;
 
     @Transient
-    List<RegionsService.Node> nodes;
+    String fullAddress;
 
-    public ShippingAddress initRegionsNode() {
-        nodes = RegionsService.getProvinceCitArea(regionsId);
-        return this;
+    @JSONField
+    public String getFullAddress() {
+        if (fullAddress == null) {
+            fullAddress = RegionsService.toString(regionsId);
+        }
+        return fullAddress;
     }
 
 }

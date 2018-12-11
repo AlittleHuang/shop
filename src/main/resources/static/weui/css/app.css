@@ -4,7 +4,7 @@
 
 html, body, #app, .bg-page {
     height: 100%;
-    width: 100%;
+    width: calc(100vw);
     background-color: #f8f8f8 !important;
 }
 
@@ -19,12 +19,21 @@ html, body, #app, .bg-page {
     height: 0 !important;
 }
 
-.heigth-100 {
+.height-100 {
     height: 100% !important;
 }
 
-.overflow-scroll {
-    overflow: scroll !important;
+.height-full{
+    height: calc(100vh);
+}
+
+.width-full{
+    width: calc(100vw);
+}
+
+.overflow-y-scroll {
+    overflow-x: scroll !important;
+    overflow-y: hidden;
 }
 
 .overflow-hidden {
@@ -193,7 +202,8 @@ html, body, #app, .bg-page {
 }
 
 .product-content, .subbar-1 {
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     height: calc(100vh - 45px);
 }
 
@@ -290,7 +300,13 @@ html, body, #app, .bg-page {
 
 .cart-item-list {
     overflow: scroll;
-    height: calc(100vh - 95px);
+    height: 100%;
+    transition: all 400ms;
+    /*height: calc(100vh - 95px);*/
+}
+
+.component-cart{
+    height: 100%;
 }
 
 
@@ -298,7 +314,7 @@ html, body, #app, .bg-page {
     width: 100%;
     background: white;
     height: 45px;
-    /*position: fixed;*/
+    position: fixed;
     bottom: 50px;
     line-height: 40px;
 }
@@ -326,6 +342,9 @@ html, body, #app, .bg-page {
 .tabbar-confirm{
     height: 45px;
     line-height: 45px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 .nav-lt {
