@@ -4,7 +4,7 @@
             <div class='nav-lt'></div>
             <div @click="$router.go(-1)" style='width: 50px'>返回</div>
             <div class='absolute-left-25 width-50 text-center'>我的地址</div>
-            <div @click="$router.push('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>
+            <div @click="$router.replace('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>
         </div>
         <div class="subbar-1 overflow-y-scroll">
             <div class="weui-panel__bd" v-for='item in list'>
@@ -40,13 +40,17 @@
             checkAddress: function (address) {
                 let query = this.$route.query;
                 query.addressId = address.id;
-                this.$router.push({path: "/order/confirm", query: query});
+                this.$router.go(-1);
+                this.$router.replace({path: "/order/confirm", query: query});
             }
         },
 
-        created: function () {
-            this.$nextTick(this.init());
-        }
+        beforeRouteEnter: function (to, from, next) {
+            next(function (this_) {
+                this_.init()
+            })
+        },
+
     })
 </script>
 

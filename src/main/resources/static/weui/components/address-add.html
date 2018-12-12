@@ -127,14 +127,11 @@
                 })
             },
         },
-
-        created: function () {
-            this.init();
+        beforeRouteEnter: function (to, from, next) {
+            next(function (this_) {
+                this_.init()
+            })
         },
-
-        beforeRouteUpdate: function () {
-            this.init();
-        }
     })
 
 </script>

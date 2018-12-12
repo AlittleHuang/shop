@@ -50,7 +50,7 @@
                     <div class="weui-panel__ft">
                         <a class="weui-cell weui-cell_link" style="color: #0D0D0D;">
                             <div class="weui-cell__bd text-rigth weui-media-box__desc">
-                                <span>共{{store.totalCount}}件商品  小计:</span>
+                                <span>共 {{store.totalCount}} 件商品  小计:</span>
                                 <span class="real-price">￥{{store.totalFee}}</span>
                             </div>
                         </a>
@@ -77,6 +77,8 @@
             return {
                 inAddressPage: null,
                 cartItemId: this.$route.query.cartItemId,
+                productItemId: this.$route.query.productItemId,
+                count: this.$route.query.count,
                 list: [],
                 totalFee: 0,
                 totalCount: 0,
@@ -98,7 +100,7 @@
                     }
                 });
                 if (this.cartItemId) {//从购物车来
-                    let postData = Qs.stringify({ids: this.cartItemId}, {arrayFormat: 'repeat'});
+                    var postData = Qs.stringify({ids: this.cartItemId}, {arrayFormat: 'repeat'});
                     axios.get("/buyer/cart/list?" + postData).then(function (resp) {
                         var list = resp.data.list;
                         if (resp.data.list.length === 0) {
@@ -113,9 +115,20 @@
                             map[storeId].items.push(item);
                         }
                         for (var key in map) this_.list.push(map[key]);
+                        console.log(this_.list)
                     });
                 } else {//立即购买
-
+                    var id = this_.productItemId;
+                    var count = this_.count;
+                    axios.get("/app/product/item/" + id).then(function (resp) {
+                        var data = resp.data.data;
+                        if (data) {
+                            var list = [data.product.store];
+                            list[0].items = [{count: count, item: data}];
+                            this_.list = list;
+                            console.log(list)
+                        }
+                    })
                 }
             },
             selectAddr: function () {
@@ -123,17 +136,31 @@
                 this.$router.push({path: "/address", query: query});
             },
             confirmOrders: function () {
+                var loading = weui.loading('正在提交订单...');
+
+                function loadingComplit(callback, timeout) {
+                    setTimeout(function () {
+                        loading.hide(callback)
+                    }, timeout >= 0 ? timeout : 1000);
+                }
+
                 if (this.cartItemId) {
-                    let url = "/buyer/order/add/from/cart";
-                    let data = Qs.stringify({
+                    var url = "/buyer/order/add/from/cart";
+                    var data = Qs.stringify({
                         cartItemIds: this.cartItemId,
                         addrId: this.address.id
                     }, {arrayFormat: 'repeat'});
                     axios.post(url, data).then(function (resp) {
-                        console.log(resp)
-                    })
+                        console.log(resp);
+                        loadingComplit();
+                    }).catch(loadingComplit)
                 } else {
-                    // TODO
+                    let data = {productItemId: this.productItemId, count: this.count, addrId: this.address.id};
+                    axios.post("/buyer/order/add/from/product", Qs.stringify(data)).then(function (resp) {
+                        loadingComplit(function () {
+                            console.log(resp);
+                        });
+                    }).catch(loadingComplit)
                 }
             }
         },
@@ -144,30 +171,27 @@
                 handler: function (list) {
                     this.totalFee = 0;
                     this.totalCount = 0;
-                    for (let i = 0; i < list.length; i++) {
-                        let items = list[i].items;
+                    for (var i = 0; i < list.length; i++) {
+                        var items = list[i].items;
                         list[i].totalCount = 0;
                         list[i].totalFee = 0;
-                        for (let j = 0; j < items.length; j++) {
-                            let item = items[j];
-                            this.totalFee += item.count * item.item.price;
-                            this.totalCount += item.count;
-                            list[i].totalCount += item.count;
-                            list[i].totalFee += item.count * item.item.price
+                        for (var j = 0; j < items.length; j++) {
+                            var item = items[j];
+                            let count = item.count * 1;
+                            this.totalFee += count * item.item.price;
+                            this.totalCount += count;
+                            list[i].totalCount += count;
+                            list[i].totalFee += count * item.item.price
                         }
                     }
                 }
             }
         },
 
-
-        beforeRouteUpdate: function () {
-            this.init();
+        beforeRouteEnter: function (to, from, next) {
+            next(function (this_) {
+                this_.init()
+            })
         },
-
-        created: function () {
-            this.$nextTick(this.init());
-        }
-
     })
 </script>

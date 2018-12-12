@@ -163,6 +163,8 @@
                         weui.alert("加入购物车失败")
                     })
 
+                } else if ("buy" === popupType) {
+                    this.$router.push({path: "/order/confirm", query: {productItemId: item.id, count: item.count}})
                 }
 
                 this.togglePopup();
@@ -187,16 +189,18 @@
         },
 
         watch: {
-            id: function () {
+            $route: function () {
                 this.loadData()
             }
         },
 
         props: ['id'],
 
-        created: function () {
-            this.loadData()
-        }
+        beforeRouteEnter: function (to, from, next) {
+            next(function (this_) {
+                this_.loadData()
+            })
+        },
     })
 
 </script>
