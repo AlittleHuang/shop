@@ -5,6 +5,7 @@ import com.shengchuang.common.mvc.view.JsonMap;
 import com.shengchuang.shop.domain.CartItem;
 import com.shengchuang.shop.service.CartService;
 import com.shengchuang.shop.service.OrderService;
+import com.shengchuang.shop.service.ShippingAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +20,13 @@ public class OrderController extends AbstractController {
     private OrderService orderService;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private ShippingAddressService shippingAddressService;
 
     @PostMapping("/buyer/order/add/from/product")
     public View add(Integer productItemId, Integer count,Integer addrId) {
         int buyerId = getLoginUserId();
-        String addr = "地址";
+        String addr = shippingAddressService.getOne(addrId).toJsonString();
         orderService.add(buyerId, productItemId, count, addr);
         return new JsonMap();
     }
@@ -31,7 +34,7 @@ public class OrderController extends AbstractController {
     @PostMapping("/buyer/order/add/from/cart")
     public View add(Integer[] cartItemIds, Integer addrId) {
         int buyerId = getLoginUserId();
-        String addr = "地址";
+        String addr = shippingAddressService.getOne(addrId).toJsonString();
         List<CartItem> cartItems = cartService.findByIds(cartItemIds);
         cartService.toOrder(buyerId, addr, cartItems);
         return new JsonMap();

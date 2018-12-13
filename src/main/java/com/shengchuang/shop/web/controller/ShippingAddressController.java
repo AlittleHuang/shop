@@ -42,6 +42,16 @@ public class ShippingAddressController extends AbstractController {
         return new JsonMap().add("list", list);
     }
 
+    @RequestMapping("/byuer/shipping-address/delete")
+    public View list(Integer id) {
+        ShippingAddress address = shippingAddressService.criteria()
+                .andEqual("userId", getLoginUserId())
+                .andEqual("id", id)
+                .getOne();
+        shippingAddressService.delete(address);
+        return new JsonMap();
+    }
+
     @RequestMapping("/byuer/shipping-address/{id}")
     public View getOne(@PathVariable Integer id) {
         ShippingAddress data = shippingAddressService.criteria()

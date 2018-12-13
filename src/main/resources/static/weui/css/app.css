@@ -8,6 +8,11 @@ html, body, #app, .bg-page {
     background-color: #f8f8f8 !important;
 }
 
+div {
+    position: relative;
+    box-sizing: border-box;
+}
+
 .position-absolute {
     position: absolute;
 }
@@ -125,6 +130,15 @@ html, body, #app, .bg-page {
     text-align: right;
 }
 
+.absolute-top-0 {
+    position: absolute;
+    top: 0px;
+}
+
+.absolute-top-10 {
+    position: absolute;
+    top: 10px;
+}
 .absolute-right-10{
     position: absolute;
     right: 10px;
@@ -293,6 +307,23 @@ html, body, #app, .bg-page {
     width: 100%;
 }
 
+.color-1 {
+    color: #111;
+}
+
+.color-3 {
+    color: #333;
+}
+
+.color-6 {
+    color: #666;
+}
+
+.color-9 {
+    color: #999;
+}
+
+
 .bottom-0 {
     position: absolute;
     bottom: 0;
@@ -378,11 +409,22 @@ html, body, #app, .bg-page {
     border-bottom: 1px solid #ccc;
     padding: 10px 20px;
 }
-
 .def-btn {
     color: white;
     background: red;
     text-align: center;
 }
+.addr-list-item {
+    width: calc(100vw - 75px);
+}
+.addr-list-item-edit{
+    width: 40px;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+}
 
+.addr-list-item-edit div{
+    line-height: 25px;
+}
 

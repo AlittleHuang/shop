@@ -389,7 +389,7 @@ input.weui-btn_plain-default{
   margin-bottom:.3em;
   padding-left:15px;
   padding-right:15px;
-  color:#999999;
+  color:#666666;
   font-size:14px;
 }
 .weui-cells__title + .weui-cells{
@@ -397,7 +397,7 @@ input.weui-btn_plain-default{
 }
 .weui-cells__tips{
   margin-top:.3em;
-  color:#999999;
+  color:#666666;
   padding-left:15px;
   padding-right:15px;
   font-size:14px;
@@ -443,7 +443,7 @@ input.weui-btn_plain-default{
 }
 .weui-cell__ft{
   text-align:right;
-  color:#999999;
+  color:#666666;
 }
 .weui-cell_swiped{
   display:block;
@@ -682,7 +682,7 @@ input.weui-btn_plain-default{
   padding:10px 15px;
   font-size:.9em;
   text-align:right;
-  color:#999999;
+  color:#666666;
   line-height:2;
 }
 .weui-form-preview__ft{
@@ -713,7 +713,7 @@ input.weui-btn_plain-default{
   float:left;
   margin-right:1em;
   min-width:4em;
-  color:#999999;
+  color:#666666;
   text-align:justify;
   text-align-last:justify;
 }
@@ -761,7 +761,7 @@ button.weui-form-preview__btn{
   display:none;
 }
 .weui-form-preview__btn_default{
-  color:#999999;
+  color:#666666;
 }
 .weui-form-preview__btn_primary{
   color:#0BB20C;
@@ -1081,11 +1081,11 @@ button.weui-vcode-btn{
   height:2px;
 }
 .weui-uploader__input-box:active{
-  border-color:#999999;
+  border-color:#666666;
 }
 .weui-uploader__input-box:active:before,
 .weui-uploader__input-box:active:after{
-  background-color:#999999;
+  background-color:#666666;
 }
 .weui-uploader__input{
   position:absolute;
@@ -1120,7 +1120,7 @@ button.weui-vcode-btn{
 }
 .weui-msg__desc{
   font-size:14px;
-  color:#999999;
+  color:#666666;
   word-wrap:break-word;
   word-break:break-all;
 }
@@ -1130,7 +1130,7 @@ button.weui-vcode-btn{
 .weui-msg__extra-area{
   margin-bottom:15px;
   font-size:14px;
-  color:#999999;
+  color:#666666;
 }
 .weui-msg__extra-area a{
   color:#586C94;
@@ -1210,7 +1210,7 @@ button.weui-vcode-btn{
           flex:1;
   padding:5px 0 0;
   font-size:0;
-  color:#999999;
+  color:#666666;
   text-align:center;
   -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
 }
@@ -1227,7 +1227,7 @@ button.weui-vcode-btn{
 i.weui-tabbar__icon,
 .weui-tabbar__icon > i{
   font-size:24px;
-  color:#999999;
+  color:#666666;
 }
 .weui-tabbar__icon img{
   width:100%;
@@ -1235,7 +1235,7 @@ i.weui-tabbar__icon,
 }
 .weui-tabbar__label{
   text-align:center;
-  color:#999999;
+  color:#666666;
   font-size:10px;
   line-height:1.8;
 }
@@ -1379,7 +1379,7 @@ i.weui-tabbar__icon,
 }
 .weui-panel__hd{
   padding:14px 15px 10px;
-  color:#999999;
+  color:#666666;
   font-size:13px;
   position:relative;
 }
@@ -1439,7 +1439,7 @@ a.weui-media-box:active{
   word-break:break-all;
 }
 .weui-media-box__desc{
-  color:#999999;
+  color:#666666;
   font-size:13px;
   line-height:1.2;
   overflow:hidden;
@@ -1596,7 +1596,7 @@ a.weui-media-box:active{
   overflow:hidden;
 }
 .weui-footer{
-  color:#999999;
+  color:#666666;
   font-size:14px;
   text-align:center;
 }
@@ -1681,7 +1681,7 @@ a.weui-media-box:active{
   line-height:1.3;
   word-wrap:break-word;
   word-break:break-all;
-  color:#999999;
+  color:#666666;
 }
 .weui-dialog__bd:first-child{
   padding:2.7em 20px 1.7em;
@@ -1756,7 +1756,7 @@ a.weui-media-box:active{
   text-align:left;
 }
 .weui-skin_android .weui-dialog__bd{
-  color:#999999;
+  color:#666666;
   padding:0.25em 1.6em 2em;
   font-size:17px;
   text-align:left;
@@ -1999,7 +1999,7 @@ a.weui-media-box:active{
   top:-0.9em;
   padding:0 .55em;
   background-color:#FFFFFF;
-  color:#999999;
+  color:#666666;
 }
 .weui-loadmore_dot .weui-loadmore__tips{
   padding:0 .16em;
@@ -2312,7 +2312,7 @@ input[type="search"]::-webkit-search-results-decoration{
   overflow:hidden;
 }
 .weui-picker__item_disabled{
-  color:#999999;
+  color:#666666;
 }
 @-webkit-keyframes slideUp{
   from{
@@ -2411,7 +2411,7 @@ input[type="search"]::-webkit-search-results-decoration{
   color:#586C94;
 }
 .weui-agree__text{
-  color:#999999;
+  color:#666666;
 }
 .weui-agree__checkbox{
   -webkit-appearance:none;

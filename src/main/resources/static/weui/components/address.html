@@ -4,18 +4,24 @@
             <div class='nav-lt'></div>
             <div @click="$router.go(-1)" style='width: 50px'>返回</div>
             <div class='absolute-left-25 width-50 text-center'>我的地址</div>
-            <div @click="$router.replace('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>
+            <div @click="$router.push('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>
         </div>
+
         <div class="subbar-1 overflow-y-scroll">
             <div class="weui-panel__bd" v-for='item in list'>
-                <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
-                    <div class='width-100' @click='checkAddress(item)'>
+                <div class='weui-media-box'>
+                    <div class='addr-list-item' @click='checkAddress(item)'>
                         <p class="weui-media-box__desc weui-flex " style='padding-bottom: 5px'>
                             <span class='weui-flex__item'>{{item.receiver}}</span>
                             <span>{{item.phone}}</span>
                         </p>
                         <p class="weui-media-box__desc">{{item.fullAddress + item.address}}</p>
                     </div>
+                    <div class='weui-media-box__desc addr-list-item-edit'>
+                        <div @click='delereAddr(item.id)'>删除</div>
+                        <div @click='$router.push("/address/add?id="+item.id)'>编辑</div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -23,6 +29,22 @@
 </template>
 
 <script>
+
+    /* 
+    weui.confirm('自定义按钮的confirm', {
+              title: '自定义按钮的confirm',
+              buttons: [{
+                      label: 'NO',
+                      type: 'default',
+                      onClick: function(){ console.log('no') }
+              }, {
+                  label: 'YES',
+                  type: 'primary',
+                  onClick: function(){ console.log('yes') }
+              }]
+      });
+ */
+    
     exports({
         data: function () {
             return {
@@ -42,7 +64,30 @@
                 query.addressId = address.id;
                 this.$router.go(-1);
                 this.$router.replace({path: "/order/confirm", query: query});
-            }
+            },
+            delereAddr: function (addrId) {
+                var this_ = this;
+                weui.confirm('', {
+                    title: '删除收货地址',
+                    buttons: [{
+                        label: '取消',
+                        type: 'default',
+                        onClick: function () {
+                            console.log('no')
+                        }
+                    }, {
+                        label: '确定',
+                        type: 'primary',
+                        onClick: function () {
+                            axios.post("/byuer/shipping-address/delete", "id=" + addrId).then(function (resp) {
+                                this_.init();
+                            });
+                        }
+                    }]
+                });
+
+            },
+
         },
 
         beforeRouteEnter: function (to, from, next) {

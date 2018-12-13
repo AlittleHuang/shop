@@ -1,11 +1,14 @@
 package com.shengchuang.shop.domain;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.shengchuang.common.util.JsonUtil;
 import com.shengchuang.shop.service.RegionsService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 收货地址
@@ -67,6 +70,14 @@ public class ShippingAddress {
             fullAddress = RegionsService.toString(regionsId);
         }
         return fullAddress;
+    }
+
+    public String toJsonString() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("receiver", receiver);
+        map.put("address", getFullAddress() + address);
+        return JsonUtil.encode(map);
     }
 
 }

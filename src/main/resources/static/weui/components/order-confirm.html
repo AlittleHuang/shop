@@ -117,7 +117,7 @@
                         for (var key in map) this_.list.push(map[key]);
                         console.log(this_.list)
                     });
-                } else {//立即购买
+                } else {//商品页面直接购买
                     var id = this_.productItemId;
                     var count = this_.count;
                     axios.get("/app/product/item/" + id).then(function (resp) {
@@ -136,12 +136,13 @@
                 this.$router.push({path: "/address", query: query});
             },
             confirmOrders: function () {
+                var this_ = this;
                 var loading = weui.loading('正在提交订单...');
 
                 function loadingComplit(callback, timeout) {
                     setTimeout(function () {
                         loading.hide(callback)
-                    }, timeout >= 0 ? timeout : 1000);
+                    }, timeout >= 0 ? timeout : 500);
                 }
 
                 if (this.cartItemId) {
@@ -152,13 +153,15 @@
                     }, {arrayFormat: 'repeat'});
                     axios.post(url, data).then(function (resp) {
                         console.log(resp);
-                        loadingComplit();
+                        loadingComplit(function () {
+                            this_.$router.replace("/")//TODO 成功提交订单
+                        });
                     }).catch(loadingComplit)
                 } else {
                     let data = {productItemId: this.productItemId, count: this.count, addrId: this.address.id};
                     axios.post("/buyer/order/add/from/product", Qs.stringify(data)).then(function (resp) {
                         loadingComplit(function () {
-                            console.log(resp);
+                            this_.$router.replace("/")//TODO 成功提交订单
                         });
                     }).catch(loadingComplit)
                 }
