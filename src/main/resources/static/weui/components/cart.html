@@ -1,6 +1,12 @@
 <template>
     <div class='component-cart width-full'>
         <!-- 列表 -->
+        <div class='bar-header navbar'>
+            <!--<div class='nav-lt'></div>-->
+            <!--<div @click="$router.go(-1)" style='width: 50px'>返回</div>-->
+            <div class='absolute-left-25 width-50 text-center'>购物车( {{count}} )</div>
+            <div @click="" class='weui-flex__item absolute-right-20'>编辑</div>
+        </div>
         <template v-if="list.length>0">
             <div class='cart-item-list'>
                 <div class="weui-panel weui-panel_access weui-cells_checkbox" v-for='store in list'>
@@ -11,9 +17,6 @@
                                 <i class="weui-icon-checked"></i>
                             </label>
                             <span>{{store.name}}</span>
-                        </div>
-                        <div class='cart-edit'>
-                            <a>编辑</a>
                         </div>
                     </div>
                     <div class="weui-panel__bd">
@@ -80,6 +83,7 @@
     exports({
         data: function () {
             return {
+                count: 0,//宝贝数量
                 dataLoaded: false,//完成
                 allChecked: false,
                 totalFee: 0,
@@ -204,10 +208,12 @@
                 deep: true,
                 handler: function (list) {
                     this.totalFee = 0;
+                    this.count = 0;
                     for (let i = 0; i < list.length; i++) {
                         let items = list[i].items;
                         for (let j = 0; j < items.length; j++) {
                             let item = items[j];
+                            this.count++;
                             if (item.checked) {
                                 this.totalFee += item.count * item.item.price
                             }

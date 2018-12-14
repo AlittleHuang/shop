@@ -1,7 +1,13 @@
 <!-- 确认订单 -->
 <template>
     <div class="component-order-confirm position-relative height-100">
-        <div class='position-relative subbar-1'>
+        <div class='bar-header navbar'>
+            <div class='nav-lt'></div>
+            <div @click="$router.go(-1)" style='width: 50px'>返回</div>
+            <div class='absolute-left-25 width-50 text-center'>确认订单</div>
+            <!--<div @click="$router.push('/address/add')" class='weui-flex__item absolute-right-20'>添加</div>-->
+        </div>
+        <div class='position-relative subbar-2'>
             <div class="weui-panel weui-panel_access">
                 <div class="weui-panel__bd">
                     <div class='weui-cell weui-cell_access weui-media-box weui-media-box_text'>
@@ -51,7 +57,7 @@
                         <a class="weui-cell weui-cell_link" style="color: #0D0D0D;">
                             <div class="weui-cell__bd text-rigth weui-media-box__desc">
                                 <span>共 {{store.totalCount}} 件商品  小计:</span>
-                                <span class="real-price">￥{{store.totalFee}}</span>
+                                <span class="real-price">￥{{store.totalFee | toFixed2}}</span>
                             </div>
                         </a>
                     </div>
@@ -61,7 +67,7 @@
 
         <div class="weui-flex weui-tabbar tabbar-confirm">
             <div class="weui-flex__item text-rigth" style="padding-right: 10px">
-                <span>合计金额:</span><span class="real-price">￥{{totalFee}}</span>
+                <span>合计金额:</span><span class="real-price">￥{{totalFee | toFixed2}}</span>
             </div>
             <div class="text-center" style="width: 100px">
                 <div class="confirm-btn" @click='confirmOrders'>提交订单</div>
@@ -92,8 +98,8 @@
                 axios.get("/byuer/shipping-address/" + (this.$route.query.addressId || "")).then(function (resp) {
                     console.log("666");
                     if (resp.data.success) {
-                        var address = resp.data.data
-                        address.fullAddress = resp.data.fullAddress
+                        var address = resp.data.data;
+                        address.fullAddress = resp.data.fullAddress;
                         this_.address = address;
                     } else {
                         this_.$router.push("/address/add");
