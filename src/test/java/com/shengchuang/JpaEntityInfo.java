@@ -47,7 +47,7 @@ public class JpaEntityInfo {
                     list.add(attribute.getName());
                 }
             }
-            attrNames = list;
+            attrNames = Collections.unmodifiableList(list);
         }
         return attrNames;
     }
