@@ -53,13 +53,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="weui-panel__ft" v-if="store.freight>0">
+                        <div class="weui-cell weui-cell_link" style="color: #0D0D0D;">
+                            <div class="weui-cell__bd text-rigth weui-media-box__desc">
+                                <span>运费:</span>
+                                <span>￥{{store.freight | toFixed2}}</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="weui-panel__ft">
-                        <a class="weui-cell weui-cell_link" style="color: #0D0D0D;">
+                        <div class="weui-cell weui-cell_link" style="color: #0D0D0D;">
                             <div class="weui-cell__bd text-rigth weui-media-box__desc">
                                 <span>共 {{store.totalCount}} 件商品  小计:</span>
                                 <span class="real-price">￥{{store.totalFee | toFixed2}}</span>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -184,18 +192,23 @@
                 handler: function (list) {
                     this.totalFee = 0;
                     this.totalCount = 0;
+
                     for (var i = 0; i < list.length; i++) {
                         var items = list[i].items;
                         list[i].totalCount = 0;
                         list[i].totalFee = 0;
+                        list[i].freight = 0;
                         for (var j = 0; j < items.length; j++) {
                             var item = items[j];
                             let count = item.count * 1;
                             this.totalFee += count * item.item.price;
                             this.totalCount += count;
                             list[i].totalCount += count;
-                            list[i].totalFee += count * item.item.price
+                            list[i].totalFee += count * item.item.price;
+                            list[i].freight = Math.max(list[i].freight, item.item.product.freight)
                         }
+                        list[i].totalFee += list[i].freight;
+                        this.totalFee += list[i].freight;
                     }
                 }
             }

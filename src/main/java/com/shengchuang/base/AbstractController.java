@@ -94,6 +94,12 @@ public abstract class AbstractController implements StreamUtil {
         return 1;
     }
 
+
+    protected Integer getLoginStoreId(){
+        // TODO get login user id
+        return 1;
+    }
+
     /**
      * 协议+域名+端口号+工程名
      */

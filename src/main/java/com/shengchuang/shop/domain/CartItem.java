@@ -45,7 +45,8 @@ public class CartItem {
      * 商品
      */
     @ManyToOne
-    @JoinColumn(name = "item_id", updatable = false, insertable = false)
+    @JoinColumn(name = "item_id", updatable = false, insertable = false,
+            foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     private ProductItem item;
 
     @Column(name = "item_id")

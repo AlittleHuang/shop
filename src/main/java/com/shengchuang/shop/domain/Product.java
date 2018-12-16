@@ -42,7 +42,8 @@ public class Product {
      * 卖家
      */
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false,
+            foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     private Store store;
 
     /**
@@ -55,7 +56,8 @@ public class Product {
      * 商品分类
      */
     @ManyToOne
-    @JoinColumn(name = "categories_id")
+    @JoinColumn(name = "categories_id",
+            foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     private Categories categories;
 
     /**
@@ -87,7 +89,7 @@ public class Product {
      * 规格
      */
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id",foreignKey = @ForeignKey(name = "none"))
     private List<ProductItem> items;
 
 }

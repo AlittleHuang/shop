@@ -38,7 +38,7 @@ public class PayLog {
     private Integer payType;
 
     @OneToMany
-    @JoinColumn(name = "pay_id")
+    @JoinColumn(name = "pay_id",foreignKey = @ForeignKey(name = "none"))
     List<Order> orders;
 
 }

@@ -34,7 +34,7 @@ public class ProductItem {
      * 商品
      */
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id",foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     private Product product;
 
     /**

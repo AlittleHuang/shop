@@ -1,5 +1,6 @@
 package com.shengchuang.shop.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -49,13 +50,31 @@ public class Order {
     private Integer id;
 
     /**
-     * 关联用户ID
+     * 用户ID
      */
-    @Column(name = "buyer_id")
+    @Column(name = "buyer_id", nullable = false)
     private Integer buyerId;
 
+    @ManyToOne
+    @JoinColumn(name = "buyer_id", updatable = false, insertable = false,
+            foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT)
+    )
+    private User buyer;
+
+    /**
+     * 店铺ID
+     */
+    @Column(name = "store_id", nullable = false)
+    private Integer storeId;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id", insertable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT)
+    )
+    private Store store;
+
     @OneToMany
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "none"))
     private List<OrderItem> orderItems;
 
     /**
@@ -66,15 +85,43 @@ public class Order {
     private Date createTime;
 
     /**
+     * 订单金额,不含运费
+     */
+    @Column(nullable = false)
+    private Double amount;
+
+    /**
+     * 订单运费
+     */
+    @Column(nullable = false)
+    private Double freight;
+
+    /**
      * 收货地址
      */
     private String address;
 
-    public Order(Integer buyerId, List<OrderItem> orderItems, String address) {
+    public Order(int buyerId, int storeId, List<OrderItem> orderItems, String address) {
         this.buyerId = buyerId;
+        this.storeId = storeId;
         this.orderItems = orderItems;
         this.address = address;
         this.createTime = new Date();
+        amount = 0d;
+        freight = 0d;
+        for (OrderItem item : orderItems) {
+            ProductItem productItem = item.getItem();
+            amount += item.getCount() * productItem.getPrice();
+            freight = Math.max(productItem.getProduct().getFreight(), freight);
+        }
+
         this.status = STATUS_NEW;
     }
+
+    @JSONField
+    public double getTotalAmount() {
+        return amount + freight;
+    }
+
+
 }

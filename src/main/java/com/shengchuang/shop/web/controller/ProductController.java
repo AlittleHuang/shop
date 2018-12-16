@@ -32,6 +32,7 @@ public class ProductController extends AbstractController {
         product.setStore(storeService.getOne(1));
         product.setStatus(0);
         product.setItems(null);
+        product.setStore(storeService.getOne(getLoginStoreId()));
         Product save = productService.save(product);
         for (ProductItem item : items) {
             item.setProduct(save);

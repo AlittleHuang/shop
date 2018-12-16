@@ -18,7 +18,7 @@ public class CartService extends BaseService<CartItem, Integer> {
     private OrderService orderService;
 
     @Transactional
-    public Order toOrder(int buyerId, String addr, List<CartItem> cartItems) {
+    public List<Order> toOrder(int buyerId, String addr, List<CartItem> cartItems) {
         List<OrderItem> orderItems = cartItems.stream()
                 .map(cartItem -> new OrderItem(cartItem.getItem(), cartItem.getCount()))
                 .collect(Collectors.toList());

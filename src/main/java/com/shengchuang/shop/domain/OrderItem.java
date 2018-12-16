@@ -30,7 +30,7 @@ public class OrderItem {
      * 商品
      */
     @ManyToOne
-    @JoinColumn(name = "order_item_id")
+    @JoinColumn(name = "order_item_id",foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     private ProductItem item;
 
     public OrderItem(ProductItem item, int count) {
