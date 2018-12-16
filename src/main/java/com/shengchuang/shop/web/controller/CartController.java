@@ -8,7 +8,6 @@ import com.shengchuang.shop.domain.CartItem;
 import com.shengchuang.shop.domain.Product;
 import com.shengchuang.shop.service.CartService;
 import com.shengchuang.shop.service.ProductItemService;
-import com.shengchuang.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +35,7 @@ public class CartController extends AbstractController {
      * @param count 添加数量
      * @return
      */
-    @PostMapping("/buyer/cart/add")
+    @PostMapping("/api/buyer/cart/add")
     public View addToCart(Integer id, Integer count) {
         Assert.notNull(id, "id错误");
         Assert.state(count != null && count > 0, "count error");
@@ -69,7 +68,7 @@ public class CartController extends AbstractController {
      *
      * @return
      */
-    @RequestMapping("/buyer/cart/list")
+    @RequestMapping("/api/buyer/cart/list")
     public View list(Integer[] ids) {
         Integer userId = 1;//TODO login user id
         Criteria<CartItem> criteria = getCartItemCriteria();
@@ -89,7 +88,7 @@ public class CartController extends AbstractController {
      * @param count  修改后的数量
      * @return
      */
-    @RequestMapping("/buyer/cart/item/count/update")
+    @RequestMapping("/api/buyer/cart/item/count/update")
     public View updateCount(Integer cartId, Integer count) {
         Assert.state(count != null && count > 0, "count error");
 

@@ -6,7 +6,6 @@ logging:
     com.shengchuang: info
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
     sql-script-encoding: UTF-8
   jpa:
     properties:

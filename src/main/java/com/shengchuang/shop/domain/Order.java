@@ -1,6 +1,5 @@
 package com.shengchuang.shop.domain;
 
-import com.shengchuang.member.core.domain.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

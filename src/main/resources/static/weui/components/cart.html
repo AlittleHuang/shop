@@ -110,7 +110,7 @@
             },
             loadData: function () {
                 var this_ = this;
-                axios.get("/buyer/cart/list").then(function (resp) {
+                axios.get("/api/buyer/cart/list").then(function (resp) {
                     let data = resp.data;
                     init(data, this_);
                 })
@@ -122,7 +122,7 @@
                 }
                 clearTimeout(item.updateCountTimeOut);
                 item.updateCountTimeOut = setTimeout(function () {
-                    axios.post("/buyer/cart/item/count/update", Qs.stringify({cartId: item.id, count: item.count}))
+                    axios.post("/api/buyer/cart/item/count/update", Qs.stringify({cartId: item.id, count: item.count}))
                 }, 800)
             },
 
@@ -225,7 +225,7 @@
 
         beforeRouteEnter: function (to, from, next) {
             next(function (this_) {
-                axios.get("/buyer/cart/list").then(function (resp) {
+                axios.get("/api/buyer/cart/list").then(function (resp) {
                     this_.dataLoaded = true;
                     let data = resp.data;
                     this_.init(data);

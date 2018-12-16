@@ -1,17 +1,15 @@
 package com.shengchuang.config.springmvc;
 
+import com.shengchuang.base.AbstractController;
 import com.shengchuang.common.exception.BusinessException;
 import com.shengchuang.common.mvc.view.JsonMap;
-import com.shengchuang.member.core.domain.User;
-import com.shengchuang.member.core.shiro.UserRealm;
-import com.shengchuang.base.AbstractController;
+import com.shengchuang.config.shiro.UserRealm;
+import com.shengchuang.shop.domain.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.mitre.dsmiley.httpproxy.ProxyServlet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +23,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 配置SpringMVC
@@ -70,15 +66,6 @@ public class SpringMvcConfig {
             ip = request.getRemoteAddr();
         }
         return ip;
-    }
-
-    @Autowired
-    @Bean
-    public AuthorizationAttributeSourceAdvisor getAuthorizationAttributeSourceAdvisor(
-            DefaultWebSecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(securityManager);
-        return advisor;
     }
 
     /**

@@ -13,7 +13,7 @@ public class RegionsController extends AbstractController {
     @Autowired
     private RegionsService regionsService;
 
-    @RequestMapping(value = "/buyer/pca.json")
+    @RequestMapping(value = "/api/buyer/pca.json")
     public String getPcaData() {
         response().setHeader("Cache-Control", "max-age=" + TimeUtil.MILLIS_PER_DAY);
         return RegionsService.getData();

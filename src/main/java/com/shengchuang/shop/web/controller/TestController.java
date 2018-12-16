@@ -2,7 +2,6 @@ package com.shengchuang.shop.web.controller;
 
 import com.shengchuang.base.AbstractController;
 import com.shengchuang.common.mvc.view.JsonVO;
-import com.shengchuang.member.core.domain.BalanceLog;
 import com.shengchuang.shop.domain.Product;
 import com.shengchuang.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

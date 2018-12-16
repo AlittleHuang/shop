@@ -15,7 +15,7 @@
 
 <table id="table-categories" title="商品分类列表" class="easyui-treegrid" style="width:100%;min-height:600px"
         data-options="
-				url: '/seller/categories/list',
+				url: '/api/admin/categories/list',
 				method: 'get',
 				rownumbers: true,
 				idField: 'id',
@@ -61,7 +61,7 @@
     }
 
     function deleteCategory(id) {
-        $.post("/seller/categories/delete", {id: id}, function (data) {
+        $.post("/api/admin/categories/delete", {id: id}, function (data) {
             if (data.success) {
                 $.messager.alert("提示", "删除成功", undefined, function () {
                     location.reload()
@@ -79,7 +79,7 @@
     }
 
     function submitForm() {
-        $.post("/seller/categories/save", $("form").serialize(), function (data) {
+        $.post("/api/admin/categories/save", $("form").serialize(), function (data) {
             if (data.success) {
                 $.messager.alert("提示", "添加成功", undefined, function () {
                     location.reload()

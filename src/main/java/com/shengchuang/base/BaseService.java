@@ -84,8 +84,8 @@ public class BaseService<T, ID> {
         return dao.findOneByAttrs(attrName, value);
     }
 
-    public List<T> findByAttr(Class<T> type, String attrName, Object... value) {
-        return dao.findByAttr(type, attrName, value);
+    public List<T> findByAttr(String attrName, Object... value) {
+        return dao.findByAttr(entityType, attrName, value);
     }
 
     @Transactional

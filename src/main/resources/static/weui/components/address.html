@@ -55,7 +55,7 @@
         methods: {
             init: function () {
                 var this_ = this;
-                axios.get("/byuer/shipping-address/list").then(function (resp) {
+                axios.get("/api/byuer/shipping-address/list").then(function (resp) {
                     var list = this_.list = resp.data.list;
                 });
             },
@@ -79,7 +79,7 @@
                         label: '确定',
                         type: 'primary',
                         onClick: function () {
-                            axios.post("/byuer/shipping-address/delete", "id=" + addrId).then(function (resp) {
+                            axios.post("/api/byuer/shipping-address/delete", "id=" + addrId).then(function (resp) {
                                 this_.init();
                             });
                         }

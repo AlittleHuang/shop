@@ -134,7 +134,7 @@
             },
             loadData: function () {
                 var htis_ = this;
-                axios.get("/app/product/" + this.id).then(function (resp) {
+                axios.get("/api/public/product/" + this.id).then(function (resp) {
                     var data = resp.data;
                     htis_.product = data.data
                 });
@@ -154,7 +154,7 @@
 
                 if ("cart" === popupType) {//确认加入购物车
 
-                    axios.post("/buyer/cart/add", Qs.stringify(item)).then(function (resp) {
+                    axios.post("/api/buyer/cart/add", Qs.stringify(item)).then(function (resp) {
                         if (resp.data.success) {
                             weui.toast("成功加入购物车", 1500);
                         } else {

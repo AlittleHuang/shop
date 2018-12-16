@@ -95,7 +95,7 @@
             init: function () {
                 this.list = [];
                 var this_ = this;
-                axios.get("/byuer/shipping-address/" + (this.$route.query.addressId || "")).then(function (resp) {
+                axios.get("/api/byuer/shipping-address/" + (this.$route.query.addressId || "")).then(function (resp) {
                     console.log("666");
                     if (resp.data.success) {
                         var address = resp.data.data;
@@ -107,7 +107,7 @@
                 });
                 if (this.cartItemId) {//从购物车来
                     var postData = Qs.stringify({ids: this.cartItemId}, {arrayFormat: 'repeat'});
-                    axios.get("/buyer/cart/list?" + postData).then(function (resp) {
+                    axios.get("/api/buyer/cart/list?" + postData).then(function (resp) {
                         var list = resp.data.list;
                         if (resp.data.list.length === 0) {
                             this_.$router.replace("/main");
@@ -126,7 +126,7 @@
                 } else {//商品页面直接购买
                     var id = this_.productItemId;
                     var count = this_.count;
-                    axios.get("/app/product/item/" + id).then(function (resp) {
+                    axios.get("/api/public/product/item/" + id).then(function (resp) {
                         var data = resp.data.data;
                         if (data) {
                             var list = [data.product.store];
@@ -152,7 +152,7 @@
                 }
 
                 if (this.cartItemId) {
-                    var url = "/buyer/order/add/from/cart";
+                    var url = "/api/buyer/order/add/from/cart";
                     var data = Qs.stringify({
                         cartItemIds: this.cartItemId,
                         addrId: this.address.id
@@ -165,9 +165,13 @@
                     }).catch(loadingComplit)
                 } else {
                     let data = {productItemId: this.productItemId, count: this.count, addrId: this.address.id};
-                    axios.post("/buyer/order/add/from/product", Qs.stringify(data)).then(function (resp) {
+                    axios.post("/api/buyer/order/add/from/product", Qs.stringify(data)).then(function (resp) {
                         loadingComplit(function () {
-                            this_.$router.replace("/")//TODO 成功提交订单
+                            if (resp.data.success) {
+                                this_.$router.replace("/")//TODO 成功提交订单
+                            } else {
+                                weui.alert(resp.data.message)
+                            }
                         });
                     }).catch(loadingComplit)
                 }

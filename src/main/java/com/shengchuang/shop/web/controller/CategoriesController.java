@@ -23,7 +23,7 @@ public class CategoriesController {
     private CategoriesService categoriesService;
     private static Categories ROOT;
 
-    @RequestMapping("/seller/categories/save")
+    @RequestMapping("/api/admin/categories/save")//增删改查
     public View save(Integer pid, String name) {
         checkRoot();
 
@@ -57,7 +57,7 @@ public class CategoriesController {
         }
     }
 
-    @RequestMapping("/seller/categories/delete")
+    @RequestMapping("/api/admin/categories/delete")
     public View delete(Integer id) {
         Assert.notNull(id, "id错误");
         boolean hasChildren = categoriesService.criteria().andEqual("pid", id).exists();
@@ -70,7 +70,7 @@ public class CategoriesController {
     }
 
 
-    @RequestMapping("/seller/categories/list")
+    @RequestMapping("/api/admin/categories/list")
     public View list() {
         checkRoot();
         List<Categories> list = categoriesService.criteria().getList();
@@ -97,7 +97,7 @@ public class CategoriesController {
 
     }
 
-    @RequestMapping("/seller/categories/tree/easyui")
+    @RequestMapping("/api/admin/categories/tree/easyui")
     public View easyUiTree() {
 
         checkRoot();

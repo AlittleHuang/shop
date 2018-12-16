@@ -72,7 +72,7 @@
                 let this_ = this;
                 let id = this_.$route.query.id;
                 if (id) {
-                    axios.get("/byuer/shipping-address/" + id).then(function (resp) {
+                    axios.get("/api/byuer/shipping-address/" + id).then(function (resp) {
                         var data = resp.data;
                         if (data.success) {
                             this_.address = data.data;
@@ -90,7 +90,7 @@
             },
             confirm: function () {
                 var this_ = this;
-                axios.post("/byuer/shipping-address/save", Qs.stringify(this.address)).then(function (resp) {
+                axios.post("/api/byuer/shipping-address/save", Qs.stringify(this.address)).then(function (resp) {
                     let data = resp.data;
                     console.log(data);
                     if (data.success) {
@@ -108,7 +108,7 @@
 
             selectArea: function () {
                 var this_ = this;
-                axios.get("/buyer/pca.json").then(function (resp) {
+                axios.get("/api/buyer/pca.json").then(function (resp) {
                     var pca = getPca(resp);
                     var config = {
                         id: 'cascadePicker',

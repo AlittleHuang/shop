@@ -24,7 +24,7 @@ public class ShippingAddressController extends AbstractController {
     private RegionsService regionsService;
 
 
-    @RequestMapping("/byuer/shipping-address/save")
+    @RequestMapping("/api/byuer/shipping-address/save")
     public View add(ShippingAddress address) {
         Assert.notEmpty(address.getReceiver(), "请输入收货人");
         Assert.state(StringUtil.isPhoneNumber(address.getPhone()), "请输入正确的手机号码");
@@ -36,13 +36,13 @@ public class ShippingAddressController extends AbstractController {
     }
 
 
-    @RequestMapping("/byuer/shipping-address/list")
+    @RequestMapping("/api/byuer/shipping-address/list")
     public View list(ShippingAddress address) {
         List<ShippingAddress> list = shippingAddressService.criteria().andEqual(address).getList();
         return new JsonMap().add("list", list);
     }
 
-    @RequestMapping("/byuer/shipping-address/delete")
+    @RequestMapping("/api/byuer/shipping-address/delete")
     public View list(Integer id) {
         ShippingAddress address = shippingAddressService.criteria()
                 .andEqual("userId", getLoginUserId())
@@ -52,7 +52,7 @@ public class ShippingAddressController extends AbstractController {
         return new JsonMap();
     }
 
-    @RequestMapping("/byuer/shipping-address/{id}")
+    @RequestMapping("/api/byuer/shipping-address/{id}")
     public View getOne(@PathVariable Integer id) {
         ShippingAddress data = shippingAddressService.criteria()
                 .andEqual("userId", getLoginUserId())
@@ -63,7 +63,7 @@ public class ShippingAddressController extends AbstractController {
                 .add("fullAddress", RegionsService.toString(data.getRegionsId()) + data.getAddress());
     }
 
-    @RequestMapping("/byuer/shipping-address/")
+    @RequestMapping("/api/byuer/shipping-address/")
     public View getDefalut() {
         ShippingAddress data = shippingAddressService.criteria()
                 .andEqual("userId", getLoginUserId())

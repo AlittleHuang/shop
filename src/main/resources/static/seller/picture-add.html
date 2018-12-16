@@ -221,7 +221,7 @@
         methods: {
             submit: function () {
                 this.details = um.getContent()
-                axios.post("/seller/product/add", Qs.stringify(this.$data,{allowDots:true}))
+                axios.post("/api/seller/product/add", Qs.stringify(this.$data,{allowDots:true}))
                     .then(function (resp) {
                         console.log(resp)
                     })

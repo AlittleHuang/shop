@@ -1,6 +1,7 @@
 package com.shengchuang.shop.web.controller;
 
 import com.shengchuang.base.AbstractController;
+import com.shengchuang.common.mvc.repository.CommonDao;
 import com.shengchuang.common.mvc.view.JsonMap;
 import com.shengchuang.common.mvc.view.JsonVO;
 import com.shengchuang.shop.domain.Product;
@@ -25,7 +26,7 @@ public class ProductController extends AbstractController {
     @Autowired
     private StoreService storeService;
 
-    @PostMapping("/seller/product/add")
+    @PostMapping("/api/seller/product/add")
     public View addProduct(Product product) {
         List<ProductItem> items = product.getItems();
         product.setStore(storeService.getOne(1));
@@ -43,7 +44,7 @@ public class ProductController extends AbstractController {
     }
 
 
-    @RequestMapping("/seller/product/list")
+    @RequestMapping("/api/seller/product/list")
     public View pageList(){
         Page<Product> page = productService.criteria().getPage(getPageRequestMap());
         if("easyui".equals(request().getParameter("formatter"))){
@@ -53,13 +54,13 @@ public class ProductController extends AbstractController {
         return new JsonMap(page);
     }
 
-    @RequestMapping("/app/product/{id}")
+    @RequestMapping("/api/public/product/{id}")//公共API
     public View getOne(@PathVariable("id") Integer id){
         Product one = productService.getOne(id);
         return new JsonMap().add("data",one);
     }
 
-    @RequestMapping("/app/product/item/{id}")
+    @RequestMapping("/api/public/product/item/{id}")
     public View getItem(@PathVariable("id") Integer id) {
         ProductItem one = commonDao.getOne(ProductItem.class, id);
         return new JsonMap().add("data", one);
