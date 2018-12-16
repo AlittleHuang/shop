@@ -20,7 +20,7 @@ public class Main {
 //        String str = IOUtils.toString(inputStream, "utf-8");
 //        System.out.println(str);
         JSONObject object = new JSONObject();
-        object.put("x","");
+        object.put("x","y");
         Integer x = object.getObject("x", Integer.class);
         System.out.println(x);
     }
