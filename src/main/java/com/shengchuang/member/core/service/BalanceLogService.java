@@ -39,7 +39,7 @@ public class BalanceLogService extends AbstractService<BalanceLog, Integer> {
      */
     public Page<BalanceLog> getPage(User user, PageRequestMap pageRequestMap) {
         Criteria<BalanceLog> conditions = toPageConditions(pageRequestMap);
-        conditions.addOrderByDesc("time", "operation", "currentBalance");
+        conditions.addOrderByDesc("time", "event", "currentBalance");
         Criteria<BalanceLog> criteria = conditions;
         String typeIn = pageRequestMap.get("typeIn");
         if (typeIn != null && !"".equals(typeIn)) {
@@ -78,7 +78,7 @@ public class BalanceLogService extends AbstractService<BalanceLog, Integer> {
 
         } else if ("bonus".equals(statisticType)) { // 奖金统计
             System.out.println(BalanceLog.bonusOpt());
-            criteria.andIn("operation", BalanceLog.bonusOpt());//, BalanceLog.SERVER
+            criteria.andIn("event", BalanceLog.bonusOpt());//, BalanceLog.SERVER
         }
         criteria.andNotBetween("amount", -Balance.MIN_CHANGE, Balance.MIN_CHANGE);
         return getPage(conditions);
@@ -100,7 +100,7 @@ public class BalanceLogService extends AbstractService<BalanceLog, Integer> {
         Criteria<BalanceLog> conditions = createCriteria();
         conditions
                 .andEqIgnoreEmpty("userId", userId)
-                .andEqIgnoreEmpty("operation", event.getIndex());
+                .andEqIgnoreEmpty("event", event.getIndex());
         return sum(conditions);
     }
 
@@ -113,7 +113,7 @@ public class BalanceLogService extends AbstractService<BalanceLog, Integer> {
         Criteria<BalanceLog> conditions = createCriteria();
         Date date = new Date();
         conditions.andEqIgnoreEmpty("userId", userId)
-                .andEqIgnoreEmpty("operation", operation)
+                .andEqIgnoreEmpty("event", operation)
                 .andBetween("time", TimeUtil.getStartTimeOfDate(date), TimeUtil.getOverTimeOfDate(date));
         long count = conditions.count();
         return count;

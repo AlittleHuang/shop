@@ -67,7 +67,7 @@ public class WithdrawService extends AbstractService<Withdraw, Integer> {
 
         userService.addUsernameFilter(criteria, username);
 
-        String balanceType = pageRequestMap.getStringValue("balanceType");
+        String balanceType = pageRequestMap.get("balanceType");
         if (balanceType != null) {
             criteria.andEqual("payInfo.displayType", balanceType);
         }
@@ -129,7 +129,7 @@ public class WithdrawService extends AbstractService<Withdraw, Integer> {
         Criteria<Withdraw> criteria = conditions;
         conditions.addOrderByDesc("updateTime", "createTime");
         userService.addUserFilter(user, pageRequestMap, criteria);
-        String balanceType = pageRequestMap.getStringValue("balanceType");
+        String balanceType = pageRequestMap.get("balanceType");
         if (balanceType != null && !balanceType.equals("")) {
             criteria.andEqual("payInfo.displayType", balanceType);
         }

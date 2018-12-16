@@ -96,7 +96,7 @@ public class RechargeService extends AbstractService<Recharge, Integer> {
             conditions.andLt("createTime", endTime, Date.class);
         }
         //币种条件类型
-        if (pageRequestMap.getIntValue("type") != null && !"".equals(pageRequestMap.getIntValue("type"))) {
+        if (pageRequestMap.getInteger("type") != null && !"".equals(pageRequestMap.getIntValue("type"))) {
             int type = pageRequestMap.getIntValue("type");
             conditions.andEqual("balanceType", type);
         }

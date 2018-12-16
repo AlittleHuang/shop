@@ -13,14 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BaseService<T, ID> {
     protected Class<T> entityType;
 
     private CommonDao.EntityDao<T, ID> dao;
     protected CommonDao commonDao;
-    @Autowired
-    protected EntityManager em;
 
     public BaseService(Class<T> entityType) {
         this.entityType = entityType;
@@ -52,72 +51,11 @@ public class BaseService<T, ID> {
     }
 
     public Criteria<T> criteria(PageRequestMap queryMap) {
-        return query(criteria(), queryMap);
+        return query(criteria(), queryMap, false);
     }
 
-    public Criteria<T> query(Criteria<T> criteria, PageRequestMap queryMap) {
-        JpaEntityInfo info = JpaEntityInfo.get(em, entityType);
-        Set<JpaEntityInfo.AttrInfo> attrSet = info.getAttrInfos();
-        for (JpaEntityInfo.AttrInfo attrInfo : attrSet) {
-
-            String[] array;
-            String value;
-
-            String name = attrInfo.name;
-            array = queryMap.getArray(name);
-            Set<?> set = cast(array, attrInfo.type);
-            if (!set.isEmpty()) {
-                criteria.andIn(name, set);
-            }
-
-            array = queryMap.getArray("[or]" + name);
-            set = cast(array, attrInfo.type);
-            if (!set.isEmpty()) {
-                criteria.orIn(name, set);
-            }
-
-            array = queryMap.getArray(name + "[not]");
-            set = cast(array, attrInfo.type);
-            if (!set.isEmpty()) {
-                criteria.andNotIn(name, set);
-            }
-
-            array = queryMap.getArray("[or]" + name + "[not]");
-            set = cast(array, attrInfo.type);
-            if (!set.isEmpty()) {
-                criteria.orNotIn(name, set);
-            }
-
-            criteria.andGt(name, queryMap.get(name + "[gt]"));
-            criteria.andGe(name, queryMap.get(name + "[ge]"));
-            criteria.andLt(name, queryMap.get(name + "[lt]"));
-            criteria.andLe(name, queryMap.get(name + "[le]"));
-
-            criteria.orGt(name, queryMap.get("[or]" + name + "[gt]"));
-            criteria.orGe(name, queryMap.get("[or]" + name + "[ge]"));
-            criteria.orLt(name, queryMap.get("[or]" + name + "[lt]"));
-            criteria.orLe(name, queryMap.get("[or]" + name + "[le]"));
-
-            value = queryMap.get(name + "[isNull]");
-            boolean isNull = "true".equalsIgnoreCase(value);
-            if (isNull || "false".equalsIgnoreCase(value)) {
-                criteria.andIsNull(name, isNull);
-            }
-
-            value = queryMap.get("[or]" + name + "[isNull]");
-            isNull = "true".equalsIgnoreCase(value);
-            if (isNull || "false".equalsIgnoreCase(value)) {
-                criteria.orIsNull(name, queryMap.getBoolean("[or]" + name + "[isNull]"));
-            }
-        }
-
-        String[] array = queryMap.getArray("[order]");
-        for (String s : array) {
-            if (attrSet.contains(s)) {
-                criteria.addOrderByAsc(s);
-            }
-        }
-
+    public Criteria<T> query(Criteria<T> criteria, PageRequestMap queryMap, boolean supportSorting) {
+        criteria.search(queryMap);
         return criteria.setPageable(queryMap);
     }
 

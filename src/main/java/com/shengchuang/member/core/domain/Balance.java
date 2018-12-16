@@ -50,13 +50,6 @@ public class Balance implements Serializable {
     @Column(nullable = false)
     private Integer type;
 
-    /**
-     * 钱包地址
-     */
-    @Column(unique = true)
-    private String address;
-
-
     /*---------- database fields ----------*///end
     /**
      * 关联用户id
@@ -74,7 +67,6 @@ public class Balance implements Serializable {
         this.lockedAmount = 0d;
         this.type = type.index;
         this.userId = userId;
-         address = randomAddr(32);
     }
 
     @NotNull

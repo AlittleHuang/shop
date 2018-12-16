@@ -7,7 +7,7 @@ import org.apache.shiro.util.ByteSource;
 public interface PasswordUtil {
 
     static ByteSource getSolt(User user) {
-        return ByteSource.Util.bytes(user.getUsername());
+        return ByteSource.Util.bytes(user.getId());
     }
 
     /**
@@ -38,19 +38,6 @@ public interface PasswordUtil {
 
     static void main(String[] args) {
         System.out.println(encodeStringPassword("123123", "admin"));
-    }
-
-    static String test() {
-        try {
-            return test("a");
-        } finally {
-            return test("b");
-        }
-    }
-
-    static String test(String x) {
-        System.out.println(x);
-        return x;
     }
 
 }

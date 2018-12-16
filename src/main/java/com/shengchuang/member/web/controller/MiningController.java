@@ -102,7 +102,7 @@ public class MiningController extends AbstractController {
         double totalMining = balanceLogService.findSumAmount(getSessionUser().getId(), Event.MINING);
         Criteria<BalanceLog> criteria = balanceLogService.createCriteria()
                 .andEqual("userId", userId)
-                .andEqual("operation", Event.MINING.index)
+                .andEqual("event", Event.MINING.index)
                 .andGe("time", TimeUtil.getStartTimeToday());
         double sum = balanceLogService.sum(criteria);
         return new JsonMap()

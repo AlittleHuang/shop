@@ -67,7 +67,7 @@ public class BalanceLog {
     /**
      * 操作
      */
-    private Integer operation;
+    private Integer event;
 
     @Transient
     private User user;
@@ -76,14 +76,14 @@ public class BalanceLog {
                       Integer type,
                       Double amount,
                       Double currentBalance,
-                      Integer operation,
+                      Integer event,
                       String info) {
         super();
         this.userId = userId;
         this.type = type;
         this.amount = amount;
         this.currentBalance = currentBalance;
-        this.operation = operation;
+        this.event = event;
         this.info = info;
         this.time = new Date();
     }
@@ -119,7 +119,7 @@ public class BalanceLog {
     }
 
     public String getOperationName() {
-        return getOperationName(operation);
+        return getOperationName(event);
     }
 
 }

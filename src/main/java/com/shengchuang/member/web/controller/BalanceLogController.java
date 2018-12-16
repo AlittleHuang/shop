@@ -41,7 +41,7 @@ public class BalanceLogController extends AbstractController {
     @RequestMapping("/admin/balance/log/inv/today")
     public View TotalInvToday() {
         Object sum = balanceLogService.createCriteria()
-                .andEqual("operation", Event.ADD_MINING.index)
+                .andEqual("event", Event.ADD_MINING.index)
                 .andGt("amount", 0.0)
                 .addSelectSum("amount")
                 .getOneObject();

@@ -1,6 +1,8 @@
 package com.shengchuang.shop.web.model;
 
 import com.alibaba.fastjson.JSONObject;
+import com.shengchuang.common.mvc.repository.query.Criteria;
+import com.shengchuang.common.mvc.repository.query.JpaEntityInfo;
 import lombok.experimental.Delegate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,7 @@ public class WebPageRequest {
     }
 
     @Delegate
-    public JSONObject getParam() {
+    private JSONObject getParam() {
         if (param == null && request != null) {
             param = new JSONObject();
             for (Map.Entry<String, String[]> e : request.getParameterMap().entrySet()) {
@@ -26,6 +28,5 @@ public class WebPageRequest {
         }
         return param;
     }
-
 
 }

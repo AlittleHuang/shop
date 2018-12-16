@@ -19,7 +19,7 @@ public class TestController extends AbstractController {
 
     @RequestMapping("/user/test")
     public Object test() {
-        List<Product> list = productService.criteria(getPageRequestMap()).getList();
+        List<Product> list = productService.criteria(getPageRequestMap().setSort()).getList();
         return new JsonVO(list);
     }
 
