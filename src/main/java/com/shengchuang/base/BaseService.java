@@ -1,18 +1,18 @@
 package com.shengchuang.base;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.util.TypeUtils;
+import com.shengchuang.common.mvc.pageable.PageRequestMap;
 import com.shengchuang.common.mvc.repository.CommonDao;
 import com.shengchuang.common.mvc.repository.EntityInfo;
 import com.shengchuang.common.mvc.repository.query.Criteria;
 import com.shengchuang.common.mvc.repository.query.JpaEntityInfo;
 import com.shengchuang.common.util.ReflectUtil;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class BaseService<T, ID> {
     protected Class<T> entityType;
@@ -51,84 +51,91 @@ public class BaseService<T, ID> {
         return dao.criteria();
     }
 
-    @SuppressWarnings("unchecked")
-    public Criteria<T> criteria(JSONObject queryMap) {
-        Criteria<T> criteria = criteria();
+    public Criteria<T> criteria(PageRequestMap queryMap) {
+        return query(criteria(), queryMap);
+    }
+
+    public Criteria<T> query(Criteria<T> criteria, PageRequestMap queryMap) {
         JpaEntityInfo info = JpaEntityInfo.get(em, entityType);
-        for (JpaEntityInfo.AttrInfo attrInfo : info.getAttrInfos()) {
+        Set<JpaEntityInfo.AttrInfo> attrSet = info.getAttrInfos();
+        for (JpaEntityInfo.AttrInfo attrInfo : attrSet) {
 
-            String key;
-            Object value;
+            String[] array;
+            String value;
 
-            key = attrInfo.name;
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value != null) {
-                criteria.andEqual(attrInfo.name, value);
+            String name = attrInfo.name;
+            array = queryMap.getArray(name);
+            Set<?> set = cast(array, attrInfo.type);
+            if (!set.isEmpty()) {
+                criteria.andIn(name, set);
             }
 
-            key = attrInfo.name + "[gt]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.andGt(key, (Comparable) value);
+            array = queryMap.getArray("[or]" + name);
+            set = cast(array, attrInfo.type);
+            if (!set.isEmpty()) {
+                criteria.orIn(name, set);
             }
 
-            key = attrInfo.name + "[ge]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.andGe(key, (Comparable) value);
+            array = queryMap.getArray(name + "[not]");
+            set = cast(array, attrInfo.type);
+            if (!set.isEmpty()) {
+                criteria.andNotIn(name, set);
             }
 
-            key = attrInfo.name + "[lt]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.andLt(key, (Comparable) value);
+            array = queryMap.getArray("[or]" + name + "[not]");
+            set = cast(array, attrInfo.type);
+            if (!set.isEmpty()) {
+                criteria.orNotIn(name, set);
             }
 
-            key = attrInfo.name + "[le]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.andLe(key, (Comparable) value);
+            criteria.andGt(name, queryMap.get(name + "[gt]"));
+            criteria.andGe(name, queryMap.get(name + "[ge]"));
+            criteria.andLt(name, queryMap.get(name + "[lt]"));
+            criteria.andLe(name, queryMap.get(name + "[le]"));
+
+            criteria.orGt(name, queryMap.get("[or]" + name + "[gt]"));
+            criteria.orGe(name, queryMap.get("[or]" + name + "[ge]"));
+            criteria.orLt(name, queryMap.get("[or]" + name + "[lt]"));
+            criteria.orLe(name, queryMap.get("[or]" + name + "[le]"));
+
+            value = queryMap.get(name + "[isNull]");
+            boolean isNull = "true".equalsIgnoreCase(value);
+            if (isNull || "false".equalsIgnoreCase(value)) {
+                criteria.andIsNull(name, isNull);
             }
 
-            key = "[or]" + attrInfo.name + "[gt]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.orGt(key, (Comparable) value);
+            value = queryMap.get("[or]" + name + "[isNull]");
+            isNull = "true".equalsIgnoreCase(value);
+            if (isNull || "false".equalsIgnoreCase(value)) {
+                criteria.orIsNull(name, queryMap.getBoolean("[or]" + name + "[isNull]"));
             }
-
-            key = "[or]" + attrInfo.name + "[ge]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.orGe(key, (Comparable) value);
-            }
-
-            key = "[or]" + attrInfo.name + "[lt]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.orLt(key, (Comparable) value);
-            }
-
-            key = "[or]" + attrInfo.name + "[le]";
-            value = queryMap.getObject(key, attrInfo.type);
-            if (value instanceof Comparable) {
-                criteria.orLe(key, (Comparable) value);
-            }
-
-            key = attrInfo.name + "[isNull]";
-            value = queryMap.getBoolean(key);
-            if (value != null) {
-                criteria.andIsNull(key, (boolean) value);
-            }
-
-            key = "[or]" + attrInfo.name + "[isNull]";
-            value = queryMap.getBoolean(key);
-            if (value != null) {
-                criteria.orIsNull(key, (boolean) value);
-            }
-
         }
 
-        return criteria;
+        String[] array = queryMap.getArray("[order]");
+        for (String s : array) {
+            if (attrSet.contains(s)) {
+                criteria.addOrderByAsc(s);
+            }
+        }
+
+        return criteria.setPageable(queryMap);
+    }
+
+    @NotNull
+    private <T> Set<T> cast(String[] array, Class<T> type) {
+        if (array == null || array.length == 0) {
+            //noinspection unchecked
+            return Collections.EMPTY_SET;
+        }
+        HashSet<T> objects = new HashSet<>();
+        for (String s : array) {
+            if (s == null || s.length() == 0) continue;
+            T cast = TypeUtils.cast(s, type, null);
+            if (cast != null) {
+                objects.add(cast);
+            }
+        }
+        return objects;
     }
 
     public T getOne(ID id) {
